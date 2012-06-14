@@ -1,0 +1,5 @@
+*.deb
+/image
+/src/zcs-lib-gson/classes/
+/src/zcs-lib-gson/zcs-lib-gson.jar
+/zimlets.list

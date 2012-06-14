@@ -1,0 +1,10 @@
+VERSION=1.7.1.1
+PACKAGE=zcs-lib-gson
+MAINTAINER=Enrico Weigelt <enrico.weigelt@vnc.biz>
+SECTION=base
+ARCHITECTURE=All
+PRIORITY=optional
+DEPENDS=
+DESCRIPTION=Google json library
+REDMINE_UPLOAD_PROJECT=zcs-lib-gson
+REDMINE_UPLOAD_URL=https://redmine.vnc.biz/redmine/
