@@ -21,54 +21,54 @@ import java.util.NoSuchElementException;
 
 /**
  * Unit tests for {@link JsonStreamParser}
- * 
+ *
  * @author Inderjeet Singh
  */
 public class JsonStreamParserTest extends TestCase {
-  private JsonStreamParser parser;
-  
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    parser = new JsonStreamParser("'one' 'two'");
-  }
+	private JsonStreamParser parser;
 
-  public void testParseTwoStrings() {
-    String actualOne = parser.next().getAsString();
-    assertEquals("one", actualOne);
-    String actualTwo = parser.next().getAsString();
-    assertEquals("two", actualTwo);
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		parser = new JsonStreamParser("'one' 'two'");
+	}
 
-  public void testIterator() {
-    assertTrue(parser.hasNext());
-    assertEquals("one", parser.next().getAsString());
-    assertTrue(parser.hasNext());
-    assertEquals("two", parser.next().getAsString());
-    assertFalse(parser.hasNext());
-  }
+	public void testParseTwoStrings() {
+		String actualOne = parser.next().getAsString();
+		assertEquals("one", actualOne);
+		String actualTwo = parser.next().getAsString();
+		assertEquals("two", actualTwo);
+	}
 
-  public void testNoSideEffectForHasNext() throws Exception {
-    assertTrue(parser.hasNext());
-    assertTrue(parser.hasNext());
-    assertTrue(parser.hasNext());
-    assertEquals("one", parser.next().getAsString());
-    
-    assertTrue(parser.hasNext());
-    assertTrue(parser.hasNext());
-    assertEquals("two", parser.next().getAsString());
-    
-    assertFalse(parser.hasNext());
-    assertFalse(parser.hasNext());
-  }
+	public void testIterator() {
+		assertTrue(parser.hasNext());
+		assertEquals("one", parser.next().getAsString());
+		assertTrue(parser.hasNext());
+		assertEquals("two", parser.next().getAsString());
+		assertFalse(parser.hasNext());
+	}
 
-  public void testCallingNextBeyondAvailableInput() {
-    parser.next();
-    parser.next();
-    try {
-      parser.next();
-      fail("Parser should not go beyond available input");
-    } catch (NoSuchElementException expected) {
-    }
-  }
+	public void testNoSideEffectForHasNext() throws Exception {
+		assertTrue(parser.hasNext());
+		assertTrue(parser.hasNext());
+		assertTrue(parser.hasNext());
+		assertEquals("one", parser.next().getAsString());
+
+		assertTrue(parser.hasNext());
+		assertTrue(parser.hasNext());
+		assertEquals("two", parser.next().getAsString());
+
+		assertFalse(parser.hasNext());
+		assertFalse(parser.hasNext());
+	}
+
+	public void testCallingNextBeyondAvailableInput() {
+		parser.next();
+		parser.next();
+		try {
+			parser.next();
+			fail("Parser should not go beyond available input");
+		} catch (NoSuchElementException expected) {
+		}
+	}
 }

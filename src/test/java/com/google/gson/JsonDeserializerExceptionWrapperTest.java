@@ -32,59 +32,59 @@ import java.util.Date;
  */
 public class JsonDeserializerExceptionWrapperTest extends TestCase {
 
-  private static final String DATE_STRING =
-      DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
-  private static final JsonPrimitive PRIMITIVE_ELEMENT = new JsonPrimitive(DATE_STRING);
+	private static final String DATE_STRING =
+	    DateFormat.getDateInstance(DateFormat.LONG).format(new Date());
+	private static final JsonPrimitive PRIMITIVE_ELEMENT = new JsonPrimitive(DATE_STRING);
 
-  public void testRethrowJsonParseException() throws Exception {
-    String errorMsg = "please rethrow me";
-    JsonDeserializerExceptionWrapper<String> wrappedJsonSerializer =
-        new JsonDeserializerExceptionWrapper<String>(
-            new ExceptionJsonDeserializer(new JsonParseException(errorMsg)));
+	public void testRethrowJsonParseException() throws Exception {
+		String errorMsg = "please rethrow me";
+		JsonDeserializerExceptionWrapper<String> wrappedJsonSerializer =
+		    new JsonDeserializerExceptionWrapper<String>(
+		    new ExceptionJsonDeserializer(new JsonParseException(errorMsg)));
 
-    try {
-      wrappedJsonSerializer.deserialize(PRIMITIVE_ELEMENT, String.class, null);
-      fail("JsonParseException should have been thrown");
-    } catch (JsonParseException expected) {
-      assertNull(expected.getCause());
-      assertEquals(errorMsg, expected.getMessage());
-    }
-  }
+		try {
+			wrappedJsonSerializer.deserialize(PRIMITIVE_ELEMENT, String.class, null);
+			fail("JsonParseException should have been thrown");
+		} catch (JsonParseException expected) {
+			assertNull(expected.getCause());
+			assertEquals(errorMsg, expected.getMessage());
+		}
+	}
 
-  public void testWrappedExceptionPropagation() throws Exception {
-    IllegalArgumentException exceptionToThrow = new IllegalArgumentException();
-    JsonDeserializerExceptionWrapper<String> wrappedJsonSerializer =
-        new JsonDeserializerExceptionWrapper<String>(
-            new ExceptionJsonDeserializer(exceptionToThrow));
+	public void testWrappedExceptionPropagation() throws Exception {
+		IllegalArgumentException exceptionToThrow = new IllegalArgumentException();
+		JsonDeserializerExceptionWrapper<String> wrappedJsonSerializer =
+		    new JsonDeserializerExceptionWrapper<String>(
+		    new ExceptionJsonDeserializer(exceptionToThrow));
 
-    try {
-      wrappedJsonSerializer.deserialize(PRIMITIVE_ELEMENT, String.class, null);
-      fail("JsonParseException should have been thrown");
-    } catch (JsonParseException expected) {
-      assertEquals(exceptionToThrow, expected.getCause());
-    }
-  }
+		try {
+			wrappedJsonSerializer.deserialize(PRIMITIVE_ELEMENT, String.class, null);
+			fail("JsonParseException should have been thrown");
+		} catch (JsonParseException expected) {
+			assertEquals(exceptionToThrow, expected.getCause());
+		}
+	}
 
-  public void testProperSerialization() throws Exception {
-    DefaultDateTypeAdapter dateSerializer = new DefaultDateTypeAdapter(DateFormat.LONG);
-    JsonDeserializerExceptionWrapper<Date> wrappedJsonSerializer =
-        new JsonDeserializerExceptionWrapper<Date>(dateSerializer);
+	public void testProperSerialization() throws Exception {
+		DefaultDateTypeAdapter dateSerializer = new DefaultDateTypeAdapter(DateFormat.LONG);
+		JsonDeserializerExceptionWrapper<Date> wrappedJsonSerializer =
+		    new JsonDeserializerExceptionWrapper<Date>(dateSerializer);
 
-    Date expected = dateSerializer.deserialize(PRIMITIVE_ELEMENT, Date.class, null);
-    Date actual = wrappedJsonSerializer.deserialize(PRIMITIVE_ELEMENT, Date.class, null);
-    assertEquals(expected, actual);
-  }
+		Date expected = dateSerializer.deserialize(PRIMITIVE_ELEMENT, Date.class, null);
+		Date actual = wrappedJsonSerializer.deserialize(PRIMITIVE_ELEMENT, Date.class, null);
+		assertEquals(expected, actual);
+	}
 
-  private static class ExceptionJsonDeserializer implements JsonDeserializer<String> {
-    private final RuntimeException exceptionToThrow;
+	private static class ExceptionJsonDeserializer implements JsonDeserializer<String> {
+		private final RuntimeException exceptionToThrow;
 
-    public ExceptionJsonDeserializer(RuntimeException exceptionToThrow) {
-      this.exceptionToThrow = exceptionToThrow;
-    }
+		public ExceptionJsonDeserializer(RuntimeException exceptionToThrow) {
+			this.exceptionToThrow = exceptionToThrow;
+		}
 
-    public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-        throws JsonParseException {
-      throw exceptionToThrow;
-    }
-  }
+		public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+		throws JsonParseException {
+			throw exceptionToThrow;
+		}
+	}
 }

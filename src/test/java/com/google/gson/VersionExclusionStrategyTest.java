@@ -28,50 +28,50 @@ import com.google.gson.annotations.Since;
  * @author Joel Leitch
  */
 public class VersionExclusionStrategyTest extends TestCase {
-  private static final double VERSION = 5.0D;
+	private static final double VERSION = 5.0D;
 
-  public void testDisallowNegativeValuesAndFailFast() throws Exception {
-    try {
-      new VersionExclusionStrategy(-1.0D);
-      fail("should have thrown an exception.");
-    } catch (IllegalArgumentException expected) { }
-  }
+	public void testDisallowNegativeValuesAndFailFast() throws Exception {
+		try {
+			new VersionExclusionStrategy(-1.0D);
+			fail("should have thrown an exception.");
+		} catch (IllegalArgumentException expected) { }
+	}
 
-  public void testClassAndFieldAreAtSameVersion() throws Exception {
-    Class<MockObject> clazz = MockObject.class;
-    Field f = clazz.getField("someField");
-    VersionExclusionStrategy strategy = new VersionExclusionStrategy(VERSION);
-    assertFalse(strategy.shouldSkipClass(clazz));
+	public void testClassAndFieldAreAtSameVersion() throws Exception {
+		Class<MockObject> clazz = MockObject.class;
+		Field f = clazz.getField("someField");
+		VersionExclusionStrategy strategy = new VersionExclusionStrategy(VERSION);
+		assertFalse(strategy.shouldSkipClass(clazz));
 
-    FieldAttributes fieldAttributes = new FieldAttributes(clazz, f, clazz);
-    assertFalse(strategy.shouldSkipField(fieldAttributes));
-  }
+		FieldAttributes fieldAttributes = new FieldAttributes(clazz, f, clazz);
+		assertFalse(strategy.shouldSkipField(fieldAttributes));
+	}
 
-  public void testClassAndFieldAreBehindInVersion() throws Exception {
-    Class<MockObject> clazz = MockObject.class;
-    Field f = clazz.getField("someField");
-    VersionExclusionStrategy strategy = new VersionExclusionStrategy(VERSION + 1);
-    assertFalse(strategy.shouldSkipClass(clazz));
-    
-    FieldAttributes fieldAttributes = new FieldAttributes(clazz, f, clazz);
-    assertFalse(strategy.shouldSkipField(fieldAttributes));
-  }
+	public void testClassAndFieldAreBehindInVersion() throws Exception {
+		Class<MockObject> clazz = MockObject.class;
+		Field f = clazz.getField("someField");
+		VersionExclusionStrategy strategy = new VersionExclusionStrategy(VERSION + 1);
+		assertFalse(strategy.shouldSkipClass(clazz));
 
-  public void testClassAndFieldAreAheadInVersion() throws Exception {
-    Class<MockObject> clazz = MockObject.class;
-    Field f = clazz.getField("someField");
-    VersionExclusionStrategy strategy = new VersionExclusionStrategy(VERSION - 1);
-    assertTrue(strategy.shouldSkipClass(clazz));
-    
-    FieldAttributes fieldAttributes = new FieldAttributes(clazz, f, clazz);
-    assertTrue(strategy.shouldSkipField(fieldAttributes));
-  }
+		FieldAttributes fieldAttributes = new FieldAttributes(clazz, f, clazz);
+		assertFalse(strategy.shouldSkipField(fieldAttributes));
+	}
 
-  @Since(VERSION)
-  private static class MockObject {
+	public void testClassAndFieldAreAheadInVersion() throws Exception {
+		Class<MockObject> clazz = MockObject.class;
+		Field f = clazz.getField("someField");
+		VersionExclusionStrategy strategy = new VersionExclusionStrategy(VERSION - 1);
+		assertTrue(strategy.shouldSkipClass(clazz));
 
-    @SuppressWarnings("unused")
-    @Since(VERSION)
-    public final int someField = 0;
-  }
+		FieldAttributes fieldAttributes = new FieldAttributes(clazz, f, clazz);
+		assertTrue(strategy.shouldSkipField(fieldAttributes));
+	}
+
+	@Since(VERSION)
+	private static class MockObject {
+
+		@SuppressWarnings("unused")
+		@Since(VERSION)
+		public final int someField = 0;
+	}
 }

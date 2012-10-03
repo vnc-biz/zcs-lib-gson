@@ -26,42 +26,42 @@ import java.lang.reflect.Field;
  * @author Joel Leitch
  */
 public class InnerClassExclusionStrategyTest extends TestCase {
-  public InnerClass innerClass;
-  public StaticNestedClass staticNestedClass;
+	public InnerClass innerClass;
+	public StaticNestedClass staticNestedClass;
 
-  private InnerClassExclusionStrategy strategy;
+	private InnerClassExclusionStrategy strategy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    innerClass = new InnerClass();
-    staticNestedClass = new StaticNestedClass();
-    strategy = new InnerClassExclusionStrategy();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		innerClass = new InnerClass();
+		staticNestedClass = new StaticNestedClass();
+		strategy = new InnerClassExclusionStrategy();
+	}
 
-  public void testExcludeInnerClassObject() throws Exception {
-    Class<?> clazz = innerClass.getClass();
-    assertTrue(strategy.shouldSkipClass(clazz));
-  }
+	public void testExcludeInnerClassObject() throws Exception {
+		Class<?> clazz = innerClass.getClass();
+		assertTrue(strategy.shouldSkipClass(clazz));
+	}
 
-  public void testExcludeInnerClassField() throws Exception {
-    Field f = getClass().getField("innerClass");
-    assertTrue(strategy.shouldSkipField(new FieldAttributes(getClass(), f, getClass())));
-  }
+	public void testExcludeInnerClassField() throws Exception {
+		Field f = getClass().getField("innerClass");
+		assertTrue(strategy.shouldSkipField(new FieldAttributes(getClass(), f, getClass())));
+	}
 
-  public void testIncludeStaticNestedClassObject() throws Exception {
-    Class<?> clazz = staticNestedClass.getClass();
-    assertFalse(strategy.shouldSkipClass(clazz));
-  }
+	public void testIncludeStaticNestedClassObject() throws Exception {
+		Class<?> clazz = staticNestedClass.getClass();
+		assertFalse(strategy.shouldSkipClass(clazz));
+	}
 
-  public void testIncludeStaticNestedClassField() throws Exception {
-    Field f = getClass().getField("staticNestedClass");
-    assertFalse(strategy.shouldSkipField(new FieldAttributes(getClass(), f, getClass())));
-  }
+	public void testIncludeStaticNestedClassField() throws Exception {
+		Field f = getClass().getField("staticNestedClass");
+		assertFalse(strategy.shouldSkipField(new FieldAttributes(getClass(), f, getClass())));
+	}
 
-  class InnerClass {
-  }
+	class InnerClass {
+	}
 
-  static class StaticNestedClass {
-  }
+	static class StaticNestedClass {
+	}
 }

@@ -38,104 +38,104 @@ import com.google.gson.JsonPrimitive;
  * @author Joel Leitch
  */
 public class ExclusionStrategyFunctionalTest extends TestCase {
-  private SampleObjectForTest src;
+	private SampleObjectForTest src;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    src = new SampleObjectForTest();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		src = new SampleObjectForTest();
+	}
 
-  public void testExclusionStrategySerialization() throws Exception {
-    Gson gson = createGson(new MyExclusionStrategy(String.class), true);
-    String json = gson.toJson(src);
-    assertFalse(json.contains("\"stringField\""));
-    assertFalse(json.contains("\"annotatedField\""));
-    assertTrue(json.contains("\"longField\""));
-  }
-  
-  public void testExclusionStrategyDeserialization() throws Exception {
-    Gson gson = createGson(new MyExclusionStrategy(String.class), false);
-    JsonObject json = new JsonObject();
-    json.add("annotatedField", new JsonPrimitive(src.annotatedField + 5));
-    json.add("stringField", new JsonPrimitive(src.stringField + "blah,blah"));
-    json.add("longField", new JsonPrimitive(1212311L));
+	public void testExclusionStrategySerialization() throws Exception {
+		Gson gson = createGson(new MyExclusionStrategy(String.class), true);
+		String json = gson.toJson(src);
+		assertFalse(json.contains("\"stringField\""));
+		assertFalse(json.contains("\"annotatedField\""));
+		assertTrue(json.contains("\"longField\""));
+	}
 
-    SampleObjectForTest target = gson.fromJson(json, SampleObjectForTest.class);
-    assertEquals(1212311L, target.longField);
+	public void testExclusionStrategyDeserialization() throws Exception {
+		Gson gson = createGson(new MyExclusionStrategy(String.class), false);
+		JsonObject json = new JsonObject();
+		json.add("annotatedField", new JsonPrimitive(src.annotatedField + 5));
+		json.add("stringField", new JsonPrimitive(src.stringField + "blah,blah"));
+		json.add("longField", new JsonPrimitive(1212311L));
 
-    // assert excluded fields are set to the defaults
-    assertEquals(src.annotatedField, target.annotatedField);
-    assertEquals(src.stringField, target.stringField);
-  }
-  
-  public void testExclusionStrategyWithMode() throws Exception {
-    SampleObjectForTest testObj = new SampleObjectForTest(
-        src.annotatedField + 5, src.stringField + "blah,blah",
-        src.longField + 655L);
+		SampleObjectForTest target = gson.fromJson(json, SampleObjectForTest.class);
+		assertEquals(1212311L, target.longField);
 
-    Gson gson = createGson(new MyExclusionStrategy(String.class), false);    
-    JsonObject json = gson.toJsonTree(testObj).getAsJsonObject();
-    assertEquals(testObj.annotatedField, json.get("annotatedField").getAsInt());
-    assertEquals(testObj.stringField, json.get("stringField").getAsString());
-    assertEquals(testObj.longField, json.get("longField").getAsLong());
+		// assert excluded fields are set to the defaults
+		assertEquals(src.annotatedField, target.annotatedField);
+		assertEquals(src.stringField, target.stringField);
+	}
 
-    SampleObjectForTest target = gson.fromJson(json, SampleObjectForTest.class);
-    assertEquals(testObj.longField, target.longField);
+	public void testExclusionStrategyWithMode() throws Exception {
+		SampleObjectForTest testObj = new SampleObjectForTest(
+		    src.annotatedField + 5, src.stringField + "blah,blah",
+		    src.longField + 655L);
 
-    // assert excluded fields are set to the defaults
-    assertEquals(src.annotatedField, target.annotatedField);
-    assertEquals(src.stringField, target.stringField);
-  }
+		Gson gson = createGson(new MyExclusionStrategy(String.class), false);
+		JsonObject json = gson.toJsonTree(testObj).getAsJsonObject();
+		assertEquals(testObj.annotatedField, json.get("annotatedField").getAsInt());
+		assertEquals(testObj.stringField, json.get("stringField").getAsString());
+		assertEquals(testObj.longField, json.get("longField").getAsLong());
 
-  private static Gson createGson(ExclusionStrategy exclusionStrategy, boolean serialization) {
-    GsonBuilder gsonBuilder = new GsonBuilder();
-    if (serialization) {
-      gsonBuilder.addSerializationExclusionStrategy(exclusionStrategy);
-    } else {
-      gsonBuilder.addDeserializationExclusionStrategy(exclusionStrategy);
-    }
-    return gsonBuilder
-        .serializeNulls()
-        .create();
-  }
-  
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target({ElementType.FIELD})
-  private static @interface Foo {
-    // Field tag only annotation
-  }
+		SampleObjectForTest target = gson.fromJson(json, SampleObjectForTest.class);
+		assertEquals(testObj.longField, target.longField);
 
-  private static class SampleObjectForTest {
-    @Foo
-    private final int annotatedField;
-    private final String stringField;
-    private final long longField;
+		// assert excluded fields are set to the defaults
+		assertEquals(src.annotatedField, target.annotatedField);
+		assertEquals(src.stringField, target.stringField);
+	}
 
-    public SampleObjectForTest() {
-      this(5, "someDefaultValue", 12345L);
-    }
-    
-    public SampleObjectForTest(int annotatedField, String stringField, long longField) {
-      this.annotatedField = annotatedField;
-      this.stringField = stringField;
-      this.longField = longField;
-    }
-  }
+	private static Gson createGson(ExclusionStrategy exclusionStrategy, boolean serialization) {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		if (serialization) {
+			gsonBuilder.addSerializationExclusionStrategy(exclusionStrategy);
+		} else {
+			gsonBuilder.addDeserializationExclusionStrategy(exclusionStrategy);
+		}
+		return gsonBuilder
+		       .serializeNulls()
+		       .create();
+	}
 
-  private static class MyExclusionStrategy implements ExclusionStrategy {
-    private final Class<?> typeToSkip;
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target( {ElementType.FIELD})
+	private static @interface Foo {
+		// Field tag only annotation
+	}
 
-    private MyExclusionStrategy(Class<?> typeToSkip) {
-      this.typeToSkip = typeToSkip;
-    }
+	private static class SampleObjectForTest {
+		@Foo
+		private final int annotatedField;
+		private final String stringField;
+		private final long longField;
 
-    public boolean shouldSkipClass(Class<?> clazz) {
-      return (clazz == typeToSkip);
-    }
+		public SampleObjectForTest() {
+			this(5, "someDefaultValue", 12345L);
+		}
 
-    public boolean shouldSkipField(FieldAttributes f) {
-      return f.getAnnotation(Foo.class) != null;
-    }
-  }
+		public SampleObjectForTest(int annotatedField, String stringField, long longField) {
+			this.annotatedField = annotatedField;
+			this.stringField = stringField;
+			this.longField = longField;
+		}
+	}
+
+	private static class MyExclusionStrategy implements ExclusionStrategy {
+		private final Class<?> typeToSkip;
+
+		private MyExclusionStrategy(Class<?> typeToSkip) {
+			this.typeToSkip = typeToSkip;
+		}
+
+		public boolean shouldSkipClass(Class<?> clazz) {
+			return (clazz == typeToSkip);
+		}
+
+		public boolean shouldSkipField(FieldAttributes f) {
+			return f.getAnnotation(Foo.class) != null;
+		}
+	}
 }

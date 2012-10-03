@@ -27,20 +27,20 @@ import java.util.Collection;
  */
 abstract class CompositionFieldNamingPolicy extends RecursiveFieldNamingPolicy {
 
-  private final RecursiveFieldNamingPolicy[] fieldPolicies;
+	private final RecursiveFieldNamingPolicy[] fieldPolicies;
 
-  public CompositionFieldNamingPolicy(RecursiveFieldNamingPolicy... fieldNamingPolicies) {
-    if (fieldNamingPolicies == null) {
-      throw new NullPointerException("naming policies can not be null.");
-    }
-    this.fieldPolicies = fieldNamingPolicies;
-  }
+	public CompositionFieldNamingPolicy(RecursiveFieldNamingPolicy... fieldNamingPolicies) {
+		if (fieldNamingPolicies == null) {
+			throw new NullPointerException("naming policies can not be null.");
+		}
+		this.fieldPolicies = fieldNamingPolicies;
+	}
 
-  @Override
-  protected String translateName(String target, Type fieldType, Collection<Annotation> annotations) {
-    for (RecursiveFieldNamingPolicy policy : fieldPolicies) {
-      target = policy.translateName(target, fieldType, annotations);
-    }
-    return target;
-  }
+	@Override
+	protected String translateName(String target, Type fieldType, Collection<Annotation> annotations) {
+		for (RecursiveFieldNamingPolicy policy : fieldPolicies) {
+			target = policy.translateName(target, fieldType, annotations);
+		}
+		return target;
+	}
 }

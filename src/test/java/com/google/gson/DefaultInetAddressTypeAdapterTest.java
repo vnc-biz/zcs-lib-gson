@@ -22,24 +22,24 @@ import junit.framework.TestCase;
 
 /**
  * Unit tests for the default serializer/deserializer for the {@code InetAddress} type.
- * 
+ *
  * @author Joel Leitch
  */
 public class DefaultInetAddressTypeAdapterTest extends TestCase {
-  private Gson gson;
-  
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new Gson();
-  }
-  
-  public void testInetAddressSerializationAndDeserialization() throws Exception {
-    InetAddress localhost = InetAddress.getLocalHost();
-    String localInetAddress = gson.toJson(localhost);
-    assertEquals("\"" + localhost.getHostAddress() + "\"", localInetAddress);
-    
-    InetAddress value = gson.fromJson(localInetAddress, InetAddress.class);
-    assertEquals(localhost, value);
-  } 
+	private Gson gson;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new Gson();
+	}
+
+	public void testInetAddressSerializationAndDeserialization() throws Exception {
+		InetAddress localhost = InetAddress.getLocalHost();
+		String localInetAddress = gson.toJson(localhost);
+		assertEquals("\"" + localhost.getHostAddress() + "\"", localInetAddress);
+
+		InetAddress value = gson.fromJson(localInetAddress, InetAddress.class);
+		assertEquals(localhost, value);
+	}
 }

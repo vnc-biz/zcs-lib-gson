@@ -42,9 +42,9 @@ import java.util.Collection;
  */
 final class LowerCaseNamingPolicy extends RecursiveFieldNamingPolicy {
 
-  @Override
-  protected String translateName(String target, Type fieldType,
-      Collection<Annotation> annotations) {
-    return target.toLowerCase();
-  }
+	@Override
+	protected String translateName(String target, Type fieldType,
+	                               Collection<Annotation> annotations) {
+		return target.toLowerCase();
+	}
 }

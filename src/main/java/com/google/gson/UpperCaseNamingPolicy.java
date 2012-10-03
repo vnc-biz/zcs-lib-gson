@@ -41,8 +41,8 @@ import java.util.Collection;
  */
 final class UpperCaseNamingPolicy extends RecursiveFieldNamingPolicy {
 
-  @Override
-  protected String translateName(String target, Type fieldType, Collection<Annotation> annotations) {
-    return target.toUpperCase();
-  }
+	@Override
+	protected String translateName(String target, Type fieldType, Collection<Annotation> annotations) {
+		return target.toUpperCase();
+	}
 }

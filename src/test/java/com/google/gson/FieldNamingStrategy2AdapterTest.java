@@ -28,18 +28,18 @@ import junit.framework.TestCase;
  */
 public class FieldNamingStrategy2AdapterTest extends TestCase {
 
-  public void testSimpleAdapter() throws Exception {
-    Field field = String.class.getFields()[0];
-    String expectedFieldName = field.getName().toUpperCase();
-    FieldNamingStrategy2 adapter =
-        new FieldNamingStrategy2Adapter(new UpperCaseNamingStrategy());
-    assertEquals(expectedFieldName, adapter.translateName(
-        new FieldAttributes(String.class, field, String.class)));
-  }
-  
-  private static class UpperCaseNamingStrategy implements FieldNamingStrategy {
-    public String translateName(Field f) {
-      return f.getName().toUpperCase();
-    }
-  }
+	public void testSimpleAdapter() throws Exception {
+		Field field = String.class.getFields()[0];
+		String expectedFieldName = field.getName().toUpperCase();
+		FieldNamingStrategy2 adapter =
+		    new FieldNamingStrategy2Adapter(new UpperCaseNamingStrategy());
+		assertEquals(expectedFieldName, adapter.translateName(
+		                 new FieldAttributes(String.class, field, String.class)));
+	}
+
+	private static class UpperCaseNamingStrategy implements FieldNamingStrategy {
+		public String translateName(Field f) {
+			return f.getName().toUpperCase();
+		}
+	}
 }

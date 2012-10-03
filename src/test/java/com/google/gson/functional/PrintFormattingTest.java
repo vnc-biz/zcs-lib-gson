@@ -37,48 +37,48 @@ import java.util.List;
  */
 public class PrintFormattingTest extends TestCase {
 
-  private Gson gson;
+	private Gson gson;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new Gson();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new Gson();
+	}
 
-  @SuppressWarnings("unchecked")
-  public void testCompactFormattingLeavesNoWhiteSpace() {
-    List list = new ArrayList();
-    list.add(new BagOfPrimitives());
-    list.add(new Nested());
-    list.add(new PrimitiveArray());
-    list.add(new ClassWithTransientFields());
+	@SuppressWarnings("unchecked")
+	public void testCompactFormattingLeavesNoWhiteSpace() {
+		List list = new ArrayList();
+		list.add(new BagOfPrimitives());
+		list.add(new Nested());
+		list.add(new PrimitiveArray());
+		list.add(new ClassWithTransientFields());
 
-    String json = gson.toJson(list);
-    assertContainsNoWhiteSpace(json);
-  }
+		String json = gson.toJson(list);
+		assertContainsNoWhiteSpace(json);
+	}
 
-  public void testJsonObjectWithNullValues() {
-    JsonObject obj = new JsonObject();
-    obj.addProperty("field1", "value1");
-    obj.addProperty("field2", (String) null);
-    String json = gson.toJson(obj);
-    assertTrue(json.contains("field1"));
-    assertFalse(json.contains("field2"));
-  }
+	public void testJsonObjectWithNullValues() {
+		JsonObject obj = new JsonObject();
+		obj.addProperty("field1", "value1");
+		obj.addProperty("field2", (String) null);
+		String json = gson.toJson(obj);
+		assertTrue(json.contains("field1"));
+		assertFalse(json.contains("field2"));
+	}
 
-  public void testJsonObjectWithNullValuesSerialized() {
-    gson = new GsonBuilder().serializeNulls().create();
-    JsonObject obj = new JsonObject();
-    obj.addProperty("field1", "value1");
-    obj.addProperty("field2", (String) null);
-    String json = gson.toJson(obj);
-    assertTrue(json.contains("field1"));
-    assertTrue(json.contains("field2"));
-  }
+	public void testJsonObjectWithNullValuesSerialized() {
+		gson = new GsonBuilder().serializeNulls().create();
+		JsonObject obj = new JsonObject();
+		obj.addProperty("field1", "value1");
+		obj.addProperty("field2", (String) null);
+		String json = gson.toJson(obj);
+		assertTrue(json.contains("field1"));
+		assertTrue(json.contains("field2"));
+	}
 
-  private static void assertContainsNoWhiteSpace(String str) {
-    for (char c : str.toCharArray()) {
-      assertFalse(Character.isWhitespace(c));
-    }
-  }
+	private static void assertContainsNoWhiteSpace(String str) {
+		for (char c : str.toCharArray()) {
+			assertFalse(Character.isWhitespace(c));
+		}
+	}
 }

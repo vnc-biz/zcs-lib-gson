@@ -22,8 +22,8 @@ package com.google.gson;
  * @author Joel Leitch
  */
 final class VersionConstants {
-  // Prevent instantiation
-  private VersionConstants() { }
+	// Prevent instantiation
+	private VersionConstants() { }
 
-  static final double IGNORE_VERSIONS = -1D;
+	static final double IGNORE_VERSIONS = -1D;
 }

@@ -24,20 +24,20 @@ import junit.framework.TestCase;
  * @author Joel Leitch
  */
 public class NullExclusionStrategyTest extends TestCase {
-  private NullExclusionStrategy strategy;
+	private NullExclusionStrategy strategy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    strategy = new NullExclusionStrategy();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		strategy = new NullExclusionStrategy();
+	}
 
-  public void testNeverSkipsClass() throws Exception {
-    assertFalse(strategy.shouldSkipClass(String.class));
-  }
+	public void testNeverSkipsClass() throws Exception {
+		assertFalse(strategy.shouldSkipClass(String.class));
+	}
 
-  public void testNeverSkipsField() throws Exception {
-    assertFalse(strategy.shouldSkipField(
-        new FieldAttributes(String.class, String.class.getFields()[0], String.class)));
-  }
+	public void testNeverSkipsField() throws Exception {
+		assertFalse(strategy.shouldSkipField(
+		                new FieldAttributes(String.class, String.class.getFields()[0], String.class)));
+	}
 }

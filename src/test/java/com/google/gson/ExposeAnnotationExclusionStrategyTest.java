@@ -28,70 +28,70 @@ import java.lang.reflect.Field;
  * @author Joel Leitch
  */
 public class ExposeAnnotationExclusionStrategyTest extends TestCase {
-  private ExposeAnnotationDeserializationExclusionStrategy deserializationStrategy;
-  private ExposeAnnotationSerializationExclusionStrategy serializationStrategy;
+	private ExposeAnnotationDeserializationExclusionStrategy deserializationStrategy;
+	private ExposeAnnotationSerializationExclusionStrategy serializationStrategy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    deserializationStrategy = new ExposeAnnotationDeserializationExclusionStrategy();
-    serializationStrategy = new ExposeAnnotationSerializationExclusionStrategy();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		deserializationStrategy = new ExposeAnnotationDeserializationExclusionStrategy();
+		serializationStrategy = new ExposeAnnotationSerializationExclusionStrategy();
+	}
 
-  public void testNeverSkipClasses() throws Exception {
-    assertFalse(deserializationStrategy.shouldSkipClass(MockObject.class));
-    assertFalse(serializationStrategy.shouldSkipClass(MockObject.class));
-  }
+	public void testNeverSkipClasses() throws Exception {
+		assertFalse(deserializationStrategy.shouldSkipClass(MockObject.class));
+		assertFalse(serializationStrategy.shouldSkipClass(MockObject.class));
+	}
 
-  public void testSkipNonAnnotatedFields() throws Exception {
-    FieldAttributes f = createFieldAttributes("hiddenField");
-    assertTrue(deserializationStrategy.shouldSkipField(f));
-    assertTrue(serializationStrategy.shouldSkipField(f));
-  }
+	public void testSkipNonAnnotatedFields() throws Exception {
+		FieldAttributes f = createFieldAttributes("hiddenField");
+		assertTrue(deserializationStrategy.shouldSkipField(f));
+		assertTrue(serializationStrategy.shouldSkipField(f));
+	}
 
-  public void testSkipExplicitlySkippedFields() throws Exception {
-    FieldAttributes f = createFieldAttributes("explicitlyHiddenField");
-    assertTrue(deserializationStrategy.shouldSkipField(f));
-    assertTrue(serializationStrategy.shouldSkipField(f));
-  }
+	public void testSkipExplicitlySkippedFields() throws Exception {
+		FieldAttributes f = createFieldAttributes("explicitlyHiddenField");
+		assertTrue(deserializationStrategy.shouldSkipField(f));
+		assertTrue(serializationStrategy.shouldSkipField(f));
+	}
 
-  public void testNeverSkipExposedAnnotatedFields() throws Exception {
-    FieldAttributes f = createFieldAttributes("exposedField");
-    assertFalse(deserializationStrategy.shouldSkipField(f));
-    assertFalse(serializationStrategy.shouldSkipField(f));
-  }
+	public void testNeverSkipExposedAnnotatedFields() throws Exception {
+		FieldAttributes f = createFieldAttributes("exposedField");
+		assertFalse(deserializationStrategy.shouldSkipField(f));
+		assertFalse(serializationStrategy.shouldSkipField(f));
+	}
 
-  public void testNeverSkipExplicitlyExposedAnnotatedFields() throws Exception {
-    FieldAttributes f = createFieldAttributes("explicitlyExposedField");
-    assertFalse(deserializationStrategy.shouldSkipField(f));
-    assertFalse(serializationStrategy.shouldSkipField(f));
-  }
-  
-  public void testDifferentSerializeAndDeserializeField() throws Exception {
-    FieldAttributes f = createFieldAttributes("explicitlyDifferentModeField");
-    assertTrue(deserializationStrategy.shouldSkipField(f));
-    assertFalse(serializationStrategy.shouldSkipField(f));
-  }
-  
-  private static FieldAttributes createFieldAttributes(String fieldName) throws Exception {
-    Field f = MockObject.class.getField(fieldName);
-    return new FieldAttributes(MockObject.class, f, MockObject.class);
-  }
-  
-  @SuppressWarnings("unused")
-  private static class MockObject {
-    @Expose
-    public final int exposedField = 0;
+	public void testNeverSkipExplicitlyExposedAnnotatedFields() throws Exception {
+		FieldAttributes f = createFieldAttributes("explicitlyExposedField");
+		assertFalse(deserializationStrategy.shouldSkipField(f));
+		assertFalse(serializationStrategy.shouldSkipField(f));
+	}
 
-    @Expose(serialize=true, deserialize=true)
-    public final int explicitlyExposedField = 0;
+	public void testDifferentSerializeAndDeserializeField() throws Exception {
+		FieldAttributes f = createFieldAttributes("explicitlyDifferentModeField");
+		assertTrue(deserializationStrategy.shouldSkipField(f));
+		assertFalse(serializationStrategy.shouldSkipField(f));
+	}
 
-    @Expose(serialize=false, deserialize=false)
-    public final int explicitlyHiddenField = 0;
-    
-    @Expose(serialize=true, deserialize=false)
-    public final int explicitlyDifferentModeField = 0;
+	private static FieldAttributes createFieldAttributes(String fieldName) throws Exception {
+		Field f = MockObject.class.getField(fieldName);
+		return new FieldAttributes(MockObject.class, f, MockObject.class);
+	}
 
-    public final int hiddenField = 0;
-  }
+	@SuppressWarnings("unused")
+	private static class MockObject {
+		@Expose
+		public final int exposedField = 0;
+
+		@Expose(serialize=true, deserialize=true)
+		public final int explicitlyExposedField = 0;
+
+		@Expose(serialize=false, deserialize=false)
+		public final int explicitlyHiddenField = 0;
+
+		@Expose(serialize=true, deserialize=false)
+		public final int explicitlyDifferentModeField = 0;
+
+		public final int hiddenField = 0;
+	}
 }

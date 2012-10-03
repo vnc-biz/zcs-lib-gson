@@ -26,11 +26,11 @@ package com.google.gson;
  */
 final class NullExclusionStrategy implements ExclusionStrategy {
 
-  public boolean shouldSkipField(FieldAttributes f) {
-    return false;
-  }
+	public boolean shouldSkipField(FieldAttributes f) {
+		return false;
+	}
 
-  public boolean shouldSkipClass(Class<?> clazz) {
-    return false;
-  }
+	public boolean shouldSkipClass(Class<?> clazz) {
+		return false;
+	}
 }

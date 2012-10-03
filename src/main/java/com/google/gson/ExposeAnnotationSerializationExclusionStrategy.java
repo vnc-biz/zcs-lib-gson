@@ -24,15 +24,15 @@ import com.google.gson.annotations.Expose;
  * @author Joel Leitch
  */
 final class ExposeAnnotationSerializationExclusionStrategy implements ExclusionStrategy {
-  public boolean shouldSkipClass(Class<?> clazz) {
-    return false;
-  }
+	public boolean shouldSkipClass(Class<?> clazz) {
+		return false;
+	}
 
-  public boolean shouldSkipField(FieldAttributes f) {
-    Expose annotation = f.getAnnotation(Expose.class);
-    if (annotation == null) {
-      return true;
-    }
-    return !annotation.serialize();
-  }
+	public boolean shouldSkipField(FieldAttributes f) {
+		Expose annotation = f.getAnnotation(Expose.class);
+		if (annotation == null) {
+			return true;
+		}
+		return !annotation.serialize();
+	}
 }

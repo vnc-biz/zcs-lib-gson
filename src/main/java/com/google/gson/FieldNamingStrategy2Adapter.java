@@ -26,13 +26,13 @@ import com.google.gson.internal.$Gson$Preconditions;
  * @author Joel Leitch
  */
 final class FieldNamingStrategy2Adapter implements FieldNamingStrategy2 {
-  private final FieldNamingStrategy adaptee;
+	private final FieldNamingStrategy adaptee;
 
-  FieldNamingStrategy2Adapter(FieldNamingStrategy adaptee) {
-    this.adaptee = $Gson$Preconditions.checkNotNull(adaptee);
-  }
+	FieldNamingStrategy2Adapter(FieldNamingStrategy adaptee) {
+		this.adaptee = $Gson$Preconditions.checkNotNull(adaptee);
+	}
 
-  public String translateName(FieldAttributes f) {
-    return adaptee.translateName(f.getFieldObject());
-  }
+	public String translateName(FieldAttributes f) {
+		return adaptee.translateName(f.getFieldObject());
+	}
 }

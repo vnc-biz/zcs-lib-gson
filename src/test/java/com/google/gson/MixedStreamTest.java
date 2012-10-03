@@ -29,211 +29,211 @@ import junit.framework.TestCase;
 
 public final class MixedStreamTest extends TestCase {
 
-  private static final Car BLUE_MUSTANG = new Car("mustang", 0x0000FF);
-  private static final Car BLACK_BMW = new Car("bmw", 0x000000);
-  private static final Car RED_MIATA = new Car("miata", 0xFF0000);
-  private static final String CARS_JSON = "[\n"
-      + "  {\n"
-      + "    \"name\": \"mustang\",\n"
-      + "    \"color\": 255\n"
-      + "  },\n"
-      + "  {\n"
-      + "    \"name\": \"bmw\",\n"
-      + "    \"color\": 0\n"
-      + "  },\n"
-      + "  {\n"
-      + "    \"name\": \"miata\",\n"
-      + "    \"color\": 16711680\n"
-      + "  }\n"
-      + "]";
+	private static final Car BLUE_MUSTANG = new Car("mustang", 0x0000FF);
+	private static final Car BLACK_BMW = new Car("bmw", 0x000000);
+	private static final Car RED_MIATA = new Car("miata", 0xFF0000);
+	private static final String CARS_JSON = "[\n"
+	                                        + "  {\n"
+	                                        + "    \"name\": \"mustang\",\n"
+	                                        + "    \"color\": 255\n"
+	                                        + "  },\n"
+	                                        + "  {\n"
+	                                        + "    \"name\": \"bmw\",\n"
+	                                        + "    \"color\": 0\n"
+	                                        + "  },\n"
+	                                        + "  {\n"
+	                                        + "    \"name\": \"miata\",\n"
+	                                        + "    \"color\": 16711680\n"
+	                                        + "  }\n"
+	                                        + "]";
 
-  public void testWriteMixedStreamed() throws IOException {
-    Gson gson = new Gson();
-    StringWriter stringWriter = new StringWriter();
-    JsonWriter jsonWriter = new JsonWriter(stringWriter);
+	public void testWriteMixedStreamed() throws IOException {
+		Gson gson = new Gson();
+		StringWriter stringWriter = new StringWriter();
+		JsonWriter jsonWriter = new JsonWriter(stringWriter);
 
-    jsonWriter.beginArray();
-    jsonWriter.setIndent("  ");
-    gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
-    gson.toJson(BLACK_BMW, Car.class, jsonWriter);
-    gson.toJson(RED_MIATA, Car.class, jsonWriter);
-    jsonWriter.endArray();
+		jsonWriter.beginArray();
+		jsonWriter.setIndent("  ");
+		gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
+		gson.toJson(BLACK_BMW, Car.class, jsonWriter);
+		gson.toJson(RED_MIATA, Car.class, jsonWriter);
+		jsonWriter.endArray();
 
-    assertEquals(CARS_JSON, stringWriter.toString());
-  }
+		assertEquals(CARS_JSON, stringWriter.toString());
+	}
 
-  public void testReadMixedStreamed() throws IOException {
-    Gson gson = new Gson();
-    StringReader stringReader = new StringReader(CARS_JSON);
-    JsonReader jsonReader = new JsonReader(stringReader);
+	public void testReadMixedStreamed() throws IOException {
+		Gson gson = new Gson();
+		StringReader stringReader = new StringReader(CARS_JSON);
+		JsonReader jsonReader = new JsonReader(stringReader);
 
-    jsonReader.beginArray();
-    assertEquals(BLUE_MUSTANG, gson.fromJson(jsonReader, Car.class));
-    assertEquals(BLACK_BMW, gson.fromJson(jsonReader, Car.class));
-    assertEquals(RED_MIATA, gson.fromJson(jsonReader, Car.class));
-    jsonReader.endArray();
-  }
-  
-  public void testReaderDoesNotMutateState() throws IOException {
-    Gson gson = new Gson();
-    JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
-    jsonReader.beginArray();
+		jsonReader.beginArray();
+		assertEquals(BLUE_MUSTANG, gson.fromJson(jsonReader, Car.class));
+		assertEquals(BLACK_BMW, gson.fromJson(jsonReader, Car.class));
+		assertEquals(RED_MIATA, gson.fromJson(jsonReader, Car.class));
+		jsonReader.endArray();
+	}
 
-    jsonReader.setLenient(false);
-    gson.fromJson(jsonReader, Car.class);
-    assertFalse(jsonReader.isLenient());
+	public void testReaderDoesNotMutateState() throws IOException {
+		Gson gson = new Gson();
+		JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
+		jsonReader.beginArray();
 
-    jsonReader.setLenient(true);
-    gson.fromJson(jsonReader, Car.class);
-    assertTrue(jsonReader.isLenient());
-  }
+		jsonReader.setLenient(false);
+		gson.fromJson(jsonReader, Car.class);
+		assertFalse(jsonReader.isLenient());
 
-  public void testWriteDoesNotMutateState() throws IOException {
-    Gson gson = new Gson();
-    JsonWriter jsonWriter = new JsonWriter(new StringWriter());
-    jsonWriter.beginArray();
+		jsonReader.setLenient(true);
+		gson.fromJson(jsonReader, Car.class);
+		assertTrue(jsonReader.isLenient());
+	}
 
-    jsonWriter.setHtmlSafe(true);
-    jsonWriter.setLenient(true);
-    gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
-    assertTrue(jsonWriter.isHtmlSafe());
-    assertTrue(jsonWriter.isLenient());
+	public void testWriteDoesNotMutateState() throws IOException {
+		Gson gson = new Gson();
+		JsonWriter jsonWriter = new JsonWriter(new StringWriter());
+		jsonWriter.beginArray();
 
-    jsonWriter.setHtmlSafe(false);
-    jsonWriter.setLenient(false);
-    gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
-    assertFalse(jsonWriter.isHtmlSafe());
-    assertFalse(jsonWriter.isLenient());
-  }
+		jsonWriter.setHtmlSafe(true);
+		jsonWriter.setLenient(true);
+		gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
+		assertTrue(jsonWriter.isHtmlSafe());
+		assertTrue(jsonWriter.isLenient());
 
-  public void testReadInvalidState() throws IOException {
-    Gson gson = new Gson();
-    JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
-    jsonReader.beginArray();
-    jsonReader.beginObject();
-    try {
-      gson.fromJson(jsonReader, String.class);
-      fail();
-    } catch (IllegalArgumentException expected) {
-    }
-  }
+		jsonWriter.setHtmlSafe(false);
+		jsonWriter.setLenient(false);
+		gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
+		assertFalse(jsonWriter.isHtmlSafe());
+		assertFalse(jsonWriter.isLenient());
+	}
 
-  public void testReadClosed() throws IOException {
-    Gson gson = new Gson();
-    JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
-    jsonReader.close();
-    try {
-      gson.fromJson(jsonReader, new TypeToken<List<Car>>() {}.getType());
-      fail();
-    } catch (IllegalStateException expected) {
-    }
-  }
+	public void testReadInvalidState() throws IOException {
+		Gson gson = new Gson();
+		JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
+		jsonReader.beginArray();
+		jsonReader.beginObject();
+		try {
+			gson.fromJson(jsonReader, String.class);
+			fail();
+		} catch (IllegalArgumentException expected) {
+		}
+	}
 
-  public void testWriteInvalidState() throws IOException {
-    Gson gson = new Gson();
-    JsonWriter jsonWriter = new JsonWriter(new StringWriter());
-    jsonWriter.beginObject();
-    try {
-      gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
-      fail();
-    } catch (IllegalStateException expected) {
-    }
-  }
+	public void testReadClosed() throws IOException {
+		Gson gson = new Gson();
+		JsonReader jsonReader = new JsonReader(new StringReader(CARS_JSON));
+		jsonReader.close();
+		try {
+			gson.fromJson(jsonReader, new TypeToken<List<Car>>() {} .getType());
+			fail();
+		} catch (IllegalStateException expected) {
+		}
+	}
 
-  public void testWriteClosed() throws IOException {
-    Gson gson = new Gson();
-    JsonWriter jsonWriter = new JsonWriter(new StringWriter());
-    jsonWriter.beginArray();
-    jsonWriter.endArray();
-    jsonWriter.close();
-    try {
-      gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
-      fail();
-    } catch (IllegalStateException expected) {
-    }
-  }
-  
-  public void testWriteNulls() {
-    Gson gson = new Gson();
-    try {
-      gson.toJson(new JsonPrimitive("hello"), (JsonWriter) null);
-      fail();
-    } catch (NullPointerException expected) {
-    }
+	public void testWriteInvalidState() throws IOException {
+		Gson gson = new Gson();
+		JsonWriter jsonWriter = new JsonWriter(new StringWriter());
+		jsonWriter.beginObject();
+		try {
+			gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
+			fail();
+		} catch (IllegalStateException expected) {
+		}
+	}
 
-    StringWriter stringWriter = new StringWriter();
-    gson.toJson(null, new JsonWriter(stringWriter));
-    assertEquals("", stringWriter.toString());
-  }
-  
-  public void testReadNulls() {
-    Gson gson = new Gson();
-    try {
-      gson.fromJson((JsonReader) null, Integer.class);
-      fail();
-    } catch (NullPointerException expected) {
-    }
-    try {
-      gson.fromJson(new JsonReader(new StringReader("true")), null);
-      fail();
-    } catch (IllegalArgumentException expected) {
-    }
-  }
+	public void testWriteClosed() throws IOException {
+		Gson gson = new Gson();
+		JsonWriter jsonWriter = new JsonWriter(new StringWriter());
+		jsonWriter.beginArray();
+		jsonWriter.endArray();
+		jsonWriter.close();
+		try {
+			gson.toJson(BLUE_MUSTANG, Car.class, jsonWriter);
+			fail();
+		} catch (IllegalStateException expected) {
+		}
+	}
 
-  public void testWriteHtmlSafe() {
-    List<String> contents = Arrays.asList("<", ">", "&", "=", "'");
-    Type type = new TypeToken<List<String>>() {}.getType();
+	public void testWriteNulls() {
+		Gson gson = new Gson();
+		try {
+			gson.toJson(new JsonPrimitive("hello"), (JsonWriter) null);
+			fail();
+		} catch (NullPointerException expected) {
+		}
 
-    StringWriter writer = new StringWriter();
-    new Gson().toJson(contents, type, new JsonWriter(writer));
-    assertEquals("[\"\\u003c\",\"\\u003e\",\"\\u0026\",\"\\u003d\",\"\\u0027\"]",
-        writer.toString());
+		StringWriter stringWriter = new StringWriter();
+		gson.toJson(null, new JsonWriter(stringWriter));
+		assertEquals("", stringWriter.toString());
+	}
 
-    writer = new StringWriter();
-    new GsonBuilder().disableHtmlEscaping().create()
-        .toJson(contents, type, new JsonWriter(writer));
-    assertEquals("[\"<\",\">\",\"&\",\"=\",\"'\"]",
-        writer.toString());
-  }
-  
-  public void testWriteLenient() {
-    List<Double> doubles = Arrays.asList(Double.NaN, Double.NEGATIVE_INFINITY,
-        Double.POSITIVE_INFINITY, -0.0d, 0.5d, 0.0d);
-    Type type = new TypeToken<List<Double>>() {}.getType();
+	public void testReadNulls() {
+		Gson gson = new Gson();
+		try {
+			gson.fromJson((JsonReader) null, Integer.class);
+			fail();
+		} catch (NullPointerException expected) {
+		}
+		try {
+			gson.fromJson(new JsonReader(new StringReader("true")), null);
+			fail();
+		} catch (IllegalArgumentException expected) {
+		}
+	}
 
-    StringWriter writer = new StringWriter();
-    JsonWriter jsonWriter = new JsonWriter(writer);
-    new GsonBuilder().serializeSpecialFloatingPointValues().create()
-        .toJson(doubles, type, jsonWriter);
-    assertEquals("[NaN,-Infinity,Infinity,-0.0,0.5,0.0]", writer.toString());
+	public void testWriteHtmlSafe() {
+		List<String> contents = Arrays.asList("<", ">", "&", "=", "'");
+		Type type = new TypeToken<List<String>>() {} .getType();
 
-    try {
-      new Gson().toJson(doubles, type, new JsonWriter(new StringWriter()));
-      fail();
-    } catch (IllegalArgumentException expected) {
-    }
-  }
+		StringWriter writer = new StringWriter();
+		new Gson().toJson(contents, type, new JsonWriter(writer));
+		assertEquals("[\"\\u003c\",\"\\u003e\",\"\\u0026\",\"\\u003d\",\"\\u0027\"]",
+		             writer.toString());
 
-  static final class Car {
-    String name;
-    int color;
+		writer = new StringWriter();
+		new GsonBuilder().disableHtmlEscaping().create()
+		.toJson(contents, type, new JsonWriter(writer));
+		assertEquals("[\"<\",\">\",\"&\",\"=\",\"'\"]",
+		             writer.toString());
+	}
 
-    Car(String name, int color) {
-      this.name = name;
-      this.color = color;
-    }
+	public void testWriteLenient() {
+		List<Double> doubles = Arrays.asList(Double.NaN, Double.NEGATIVE_INFINITY,
+		                                     Double.POSITIVE_INFINITY, -0.0d, 0.5d, 0.0d);
+		Type type = new TypeToken<List<Double>>() {} .getType();
 
-    // used by Gson
-    Car() {}
+		StringWriter writer = new StringWriter();
+		JsonWriter jsonWriter = new JsonWriter(writer);
+		new GsonBuilder().serializeSpecialFloatingPointValues().create()
+		.toJson(doubles, type, jsonWriter);
+		assertEquals("[NaN,-Infinity,Infinity,-0.0,0.5,0.0]", writer.toString());
 
-    @Override public int hashCode() {
-      return name.hashCode() ^ color;
-    }
+		try {
+			new Gson().toJson(doubles, type, new JsonWriter(new StringWriter()));
+			fail();
+		} catch (IllegalArgumentException expected) {
+		}
+	}
 
-    @Override public boolean equals(Object o) {
-      return o instanceof Car
-          && ((Car) o).name.equals(name)
-          && ((Car) o).color == color;
-    }
-  }
+	static final class Car {
+		String name;
+		int color;
+
+		Car(String name, int color) {
+			this.name = name;
+			this.color = color;
+		}
+
+		// used by Gson
+		Car() {}
+
+		@Override public int hashCode() {
+			return name.hashCode() ^ color;
+		}
+
+		@Override public boolean equals(Object o) {
+			return o instanceof Car
+			       && ((Car) o).name.equals(name)
+			       && ((Car) o).color == color;
+		}
+	}
 }

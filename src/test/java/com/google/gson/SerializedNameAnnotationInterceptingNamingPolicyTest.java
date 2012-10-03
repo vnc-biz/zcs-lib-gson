@@ -26,36 +26,36 @@ import com.google.gson.annotations.SerializedName;
  * @author Joel Leitch
  */
 public class SerializedNameAnnotationInterceptingNamingPolicyTest extends TestCase {
-  private static final String ANNOTATED_FIELD_NAME = "annotatedFieldName";
+	private static final String ANNOTATED_FIELD_NAME = "annotatedFieldName";
 
-  private SerializedNameAnnotationInterceptingNamingPolicy policy;
+	private SerializedNameAnnotationInterceptingNamingPolicy policy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    policy = new SerializedNameAnnotationInterceptingNamingPolicy(new JavaFieldNamingPolicy());
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		policy = new SerializedNameAnnotationInterceptingNamingPolicy(new JavaFieldNamingPolicy());
+	}
 
-  public void testFieldWithAnnotation() throws Exception {
-    String fieldName = "fieldWithAnnotation";
-    FieldAttributes f = new FieldAttributes(
-        SomeObject.class, SomeObject.class.getField(fieldName), SomeObject.class);
+	public void testFieldWithAnnotation() throws Exception {
+		String fieldName = "fieldWithAnnotation";
+		FieldAttributes f = new FieldAttributes(
+		    SomeObject.class, SomeObject.class.getField(fieldName), SomeObject.class);
 
-    assertFalse(ANNOTATED_FIELD_NAME.equals(fieldName));
-    assertEquals(ANNOTATED_FIELD_NAME, policy.translateName(f));
-  }
+		assertFalse(ANNOTATED_FIELD_NAME.equals(fieldName));
+		assertEquals(ANNOTATED_FIELD_NAME, policy.translateName(f));
+	}
 
-  public void testFieldWithoutAnnotation() throws Exception {
-    String fieldName = "fieldWithoutAnnotation";
-    FieldAttributes f = new FieldAttributes(
-        SomeObject.class, SomeObject.class.getField(fieldName), SomeObject.class);
+	public void testFieldWithoutAnnotation() throws Exception {
+		String fieldName = "fieldWithoutAnnotation";
+		FieldAttributes f = new FieldAttributes(
+		    SomeObject.class, SomeObject.class.getField(fieldName), SomeObject.class);
 
-    assertEquals(fieldName, policy.translateName(f));
-  }
+		assertEquals(fieldName, policy.translateName(f));
+	}
 
-  @SuppressWarnings("unused")
-  private static class SomeObject {
-    @SerializedName(ANNOTATED_FIELD_NAME) public final int fieldWithAnnotation = 1;
-    public final int fieldWithoutAnnotation = 1;
-  }
+	@SuppressWarnings("unused")
+	private static class SomeObject {
+		@SerializedName(ANNOTATED_FIELD_NAME) public final int fieldWithAnnotation = 1;
+		public final int fieldWithoutAnnotation = 1;
+	}
 }

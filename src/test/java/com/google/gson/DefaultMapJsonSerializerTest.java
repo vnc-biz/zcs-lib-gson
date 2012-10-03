@@ -31,42 +31,42 @@ import java.util.Map;
  * @author Joel Leitch
  */
 public class DefaultMapJsonSerializerTest extends TestCase {
-  private JsonSerializer<Map<?, ?>> mapSerializer;
+	private JsonSerializer<Map<?, ?>> mapSerializer;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    mapSerializer = new MapTypeAdapter();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		mapSerializer = new MapTypeAdapter();
+	}
 
-  public void testEmptyMapNoTypeSerialization() {
-    Map<String, String> emptyMap = new HashMap<String, String>();
-    JsonElement element = mapSerializer.serialize(emptyMap, emptyMap.getClass(), null);
-    assertTrue(element instanceof JsonObject);
-    JsonObject emptyMapJsonObject = (JsonObject) element;
-    assertTrue(emptyMapJsonObject.entrySet().isEmpty());
-  }
+	public void testEmptyMapNoTypeSerialization() {
+		Map<String, String> emptyMap = new HashMap<String, String>();
+		JsonElement element = mapSerializer.serialize(emptyMap, emptyMap.getClass(), null);
+		assertTrue(element instanceof JsonObject);
+		JsonObject emptyMapJsonObject = (JsonObject) element;
+		assertTrue(emptyMapJsonObject.entrySet().isEmpty());
+	}
 
-  public void testEmptyMapSerialization() {
-    Type mapType = new TypeToken<Map<String, String>>() { }.getType();
-    Map<String, String> emptyMap = new HashMap<String, String>();
-    JsonElement element = mapSerializer.serialize(emptyMap, mapType, null);
+	public void testEmptyMapSerialization() {
+		Type mapType = new TypeToken<Map<String, String>>() { } .getType();
+		Map<String, String> emptyMap = new HashMap<String, String>();
+		JsonElement element = mapSerializer.serialize(emptyMap, mapType, null);
 
-    assertTrue(element instanceof JsonObject);
-    JsonObject emptyMapJsonObject = (JsonObject) element;
-    assertTrue(emptyMapJsonObject.entrySet().isEmpty());
-  }
-  
-  public void testNonEmptyMapSerialization() {
-    Type mapType = new TypeToken<Map<String, String>>() { }.getType();
-    Map<String, String> myMap = new HashMap<String, String>();
-    String key = "key1";
-    myMap.put(key, "value1");
-    Gson gson = new Gson();
-    JsonElement element = gson.toJsonTree(myMap, mapType);
+		assertTrue(element instanceof JsonObject);
+		JsonObject emptyMapJsonObject = (JsonObject) element;
+		assertTrue(emptyMapJsonObject.entrySet().isEmpty());
+	}
 
-    assertTrue(element.isJsonObject());
-    JsonObject mapJsonObject = element.getAsJsonObject();
-    assertTrue(mapJsonObject.has(key));
-  }
+	public void testNonEmptyMapSerialization() {
+		Type mapType = new TypeToken<Map<String, String>>() { } .getType();
+		Map<String, String> myMap = new HashMap<String, String>();
+		String key = "key1";
+		myMap.put(key, "value1");
+		Gson gson = new Gson();
+		JsonElement element = gson.toJsonTree(myMap, mapType);
+
+		assertTrue(element.isJsonObject());
+		JsonObject mapJsonObject = element.getAsJsonObject();
+		assertTrue(mapJsonObject.has(key));
+	}
 }

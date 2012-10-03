@@ -25,9 +25,9 @@ import junit.framework.TestCase;
  */
 public class GsonBuilderTest extends TestCase {
 
-  public void testCreatingMoreThanOnce() {
-    GsonBuilder builder = new GsonBuilder();
-    builder.create();
-    builder.create();
-  }
+	public void testCreatingMoreThanOnce() {
+		GsonBuilder builder = new GsonBuilder();
+		builder.create();
+		builder.create();
+	}
 }

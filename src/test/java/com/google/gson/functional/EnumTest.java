@@ -44,145 +44,145 @@ import java.util.Set;
  */
 public class EnumTest extends TestCase {
 
-  private Gson gson;
+	private Gson gson;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new Gson();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new Gson();
+	}
 
-  public void testTopLevelEnumSerialization() throws Exception {
-    String result = gson.toJson(MyEnum.VALUE1);
-    assertEquals('"' + MyEnum.VALUE1.toString() + '"', result);
-  }
+	public void testTopLevelEnumSerialization() throws Exception {
+		String result = gson.toJson(MyEnum.VALUE1);
+		assertEquals('"' + MyEnum.VALUE1.toString() + '"', result);
+	}
 
-  public void testTopLevelEnumDeserialization() throws Exception {
-    MyEnum result = gson.fromJson('"' + MyEnum.VALUE1.toString() + '"', MyEnum.class);
-    assertEquals(MyEnum.VALUE1, result);
-  }
+	public void testTopLevelEnumDeserialization() throws Exception {
+		MyEnum result = gson.fromJson('"' + MyEnum.VALUE1.toString() + '"', MyEnum.class);
+		assertEquals(MyEnum.VALUE1, result);
+	}
 
-  public void testTopLevelEnumInASingleElementArrayDeserialization() {
-    String json = "[" + MyEnum.VALUE1.getExpectedJson() + "]";
-    MyEnum target = gson.fromJson(json, MyEnum.class);
-    assertEquals(json, "[" + target.getExpectedJson() + "]");
-  }
+	public void testTopLevelEnumInASingleElementArrayDeserialization() {
+		String json = "[" + MyEnum.VALUE1.getExpectedJson() + "]";
+		MyEnum target = gson.fromJson(json, MyEnum.class);
+		assertEquals(json, "[" + target.getExpectedJson() + "]");
+	}
 
-  public void testCollectionOfEnumsSerialization() {
-    Type type = new TypeToken<Collection<MyEnum>>() {}.getType();
-    Collection<MyEnum> target = new ArrayList<MyEnum>();
-    target.add(MyEnum.VALUE1);
-    target.add(MyEnum.VALUE2);
-    String expectedJson = "[\"VALUE1\",\"VALUE2\"]";
-    String actualJson = gson.toJson(target);
-    assertEquals(expectedJson, actualJson);
-    actualJson = gson.toJson(target, type);
-    assertEquals(expectedJson, actualJson);
-  }
+	public void testCollectionOfEnumsSerialization() {
+		Type type = new TypeToken<Collection<MyEnum>>() {} .getType();
+		Collection<MyEnum> target = new ArrayList<MyEnum>();
+		target.add(MyEnum.VALUE1);
+		target.add(MyEnum.VALUE2);
+		String expectedJson = "[\"VALUE1\",\"VALUE2\"]";
+		String actualJson = gson.toJson(target);
+		assertEquals(expectedJson, actualJson);
+		actualJson = gson.toJson(target, type);
+		assertEquals(expectedJson, actualJson);
+	}
 
-  public void testCollectionOfEnumsDeserialization() {
-    Type type = new TypeToken<Collection<MyEnum>>() {}.getType();
-    String json = "[\"VALUE1\",\"VALUE2\"]";
-    Collection<MyEnum> target = gson.fromJson(json, type);
-    MoreAsserts.assertContains(target, MyEnum.VALUE1);
-    MoreAsserts.assertContains(target, MyEnum.VALUE2);
-  }
+	public void testCollectionOfEnumsDeserialization() {
+		Type type = new TypeToken<Collection<MyEnum>>() {} .getType();
+		String json = "[\"VALUE1\",\"VALUE2\"]";
+		Collection<MyEnum> target = gson.fromJson(json, type);
+		MoreAsserts.assertContains(target, MyEnum.VALUE1);
+		MoreAsserts.assertContains(target, MyEnum.VALUE2);
+	}
 
-  public void testClassWithEnumFieldSerialization() throws Exception {
-    ClassWithEnumFields target = new ClassWithEnumFields();
-    assertEquals(target.getExpectedJson(), gson.toJson(target));
-  }
+	public void testClassWithEnumFieldSerialization() throws Exception {
+		ClassWithEnumFields target = new ClassWithEnumFields();
+		assertEquals(target.getExpectedJson(), gson.toJson(target));
+	}
 
-  public void testClassWithEnumFieldDeserialization() throws Exception {
-    String json = "{value1:'VALUE1',value2:'VALUE2'}";
-    ClassWithEnumFields target = gson.fromJson(json, ClassWithEnumFields.class);
-    assertEquals(MyEnum.VALUE1,target.value1);
-    assertEquals(MyEnum.VALUE2,target.value2);
-  }
+	public void testClassWithEnumFieldDeserialization() throws Exception {
+		String json = "{value1:'VALUE1',value2:'VALUE2'}";
+		ClassWithEnumFields target = gson.fromJson(json, ClassWithEnumFields.class);
+		assertEquals(MyEnum.VALUE1,target.value1);
+		assertEquals(MyEnum.VALUE2,target.value2);
+	}
 
-  private static enum MyEnum {
-    VALUE1, VALUE2;
+	private static enum MyEnum {
+		VALUE1, VALUE2;
 
-    public String getExpectedJson() {
-      return "\"" + toString() + "\"";
-    }
-  }
+		public String getExpectedJson() {
+			return "\"" + toString() + "\"";
+		}
+	}
 
-  private static class ClassWithEnumFields {
-    private final MyEnum value1 = MyEnum.VALUE1;
-    private final MyEnum value2 = MyEnum.VALUE2;
-    public String getExpectedJson() {
-      return "{\"value1\":\"" + value1 + "\",\"value2\":\"" + value2 + "\"}";
-    }
-  }
+	private static class ClassWithEnumFields {
+		private final MyEnum value1 = MyEnum.VALUE1;
+		private final MyEnum value2 = MyEnum.VALUE2;
+		public String getExpectedJson() {
+			return "{\"value1\":\"" + value1 + "\",\"value2\":\"" + value2 + "\"}";
+		}
+	}
 
-  /**
-   * Test for issue 226.
-   */
-  public void testEnumSubclass() {
-    assertFalse(Roshambo.class == Roshambo.ROCK.getClass());
-    assertEquals("\"ROCK\"", gson.toJson(Roshambo.ROCK));
-    assertEquals("[\"ROCK\",\"PAPER\",\"SCISSORS\"]", gson.toJson(EnumSet.allOf(Roshambo.class)));
-    assertEquals(Roshambo.ROCK, gson.fromJson("\"ROCK\"", Roshambo.class));
-    assertEquals(EnumSet.allOf(Roshambo.class),
-        gson.fromJson("[\"ROCK\",\"PAPER\",\"SCISSORS\"]", new TypeToken<Set<Roshambo>>() {}.getType()));
-  }
+	/**
+	 * Test for issue 226.
+	 */
+	public void testEnumSubclass() {
+		assertFalse(Roshambo.class == Roshambo.ROCK.getClass());
+		assertEquals("\"ROCK\"", gson.toJson(Roshambo.ROCK));
+		assertEquals("[\"ROCK\",\"PAPER\",\"SCISSORS\"]", gson.toJson(EnumSet.allOf(Roshambo.class)));
+		assertEquals(Roshambo.ROCK, gson.fromJson("\"ROCK\"", Roshambo.class));
+		assertEquals(EnumSet.allOf(Roshambo.class),
+		gson.fromJson("[\"ROCK\",\"PAPER\",\"SCISSORS\"]", new TypeToken<Set<Roshambo>>() {} .getType()));
+	}
 
-  public void testEnumSubclassWithRegisteredTypeAdapter() {
-    gson = new GsonBuilder()
-        .registerTypeHierarchyAdapter(Roshambo.class, new MyEnumTypeAdapter())
-        .create();
-    assertFalse(Roshambo.class == Roshambo.ROCK.getClass());
-    assertEquals("\"123ROCK\"", gson.toJson(Roshambo.ROCK));
-    assertEquals("[\"123ROCK\",\"123PAPER\",\"123SCISSORS\"]", gson.toJson(EnumSet.allOf(Roshambo.class)));
-    assertEquals(Roshambo.ROCK, gson.fromJson("\"123ROCK\"", Roshambo.class));
-    assertEquals(EnumSet.allOf(Roshambo.class),
-        gson.fromJson("[\"123ROCK\",\"123PAPER\",\"123SCISSORS\"]", new TypeToken<Set<Roshambo>>() {}.getType()));
-  }
+	public void testEnumSubclassWithRegisteredTypeAdapter() {
+		gson = new GsonBuilder()
+		.registerTypeHierarchyAdapter(Roshambo.class, new MyEnumTypeAdapter())
+		.create();
+		assertFalse(Roshambo.class == Roshambo.ROCK.getClass());
+		assertEquals("\"123ROCK\"", gson.toJson(Roshambo.ROCK));
+		assertEquals("[\"123ROCK\",\"123PAPER\",\"123SCISSORS\"]", gson.toJson(EnumSet.allOf(Roshambo.class)));
+		assertEquals(Roshambo.ROCK, gson.fromJson("\"123ROCK\"", Roshambo.class));
+		assertEquals(EnumSet.allOf(Roshambo.class),
+		gson.fromJson("[\"123ROCK\",\"123PAPER\",\"123SCISSORS\"]", new TypeToken<Set<Roshambo>>() {} .getType()));
+	}
 
-  public void testEnumSubclassAsParameterizedType() {
-    Collection<Roshambo> list = new ArrayList<Roshambo>();
-    list.add(Roshambo.ROCK);
-    list.add(Roshambo.PAPER);
+	public void testEnumSubclassAsParameterizedType() {
+		Collection<Roshambo> list = new ArrayList<Roshambo>();
+		list.add(Roshambo.ROCK);
+		list.add(Roshambo.PAPER);
 
-    String json = gson.toJson(list);
-    assertEquals("[\"ROCK\",\"PAPER\"]", json);
+		String json = gson.toJson(list);
+		assertEquals("[\"ROCK\",\"PAPER\"]", json);
 
-    Type collectionType = new TypeToken<Collection<Roshambo>>() {}.getType();
-    Collection<Roshambo> actualJsonList = gson.fromJson(json, collectionType);
-    MoreAsserts.assertContains(actualJsonList, Roshambo.ROCK);
-    MoreAsserts.assertContains(actualJsonList, Roshambo.PAPER);
-  }
+		Type collectionType = new TypeToken<Collection<Roshambo>>() {} .getType();
+		Collection<Roshambo> actualJsonList = gson.fromJson(json, collectionType);
+		MoreAsserts.assertContains(actualJsonList, Roshambo.ROCK);
+		MoreAsserts.assertContains(actualJsonList, Roshambo.PAPER);
+	}
 
-  public enum Roshambo {
-    ROCK {
-      @Override Roshambo defeats() {
-        return SCISSORS;
-      }
-    },
-    PAPER {
-      @Override Roshambo defeats() {
-        return ROCK;
-      }
-    },
-    SCISSORS {
-      @Override Roshambo defeats() {
-        return PAPER;
-      }
-    };
+	public enum Roshambo {
+		ROCK {
+			@Override Roshambo defeats() {
+				return SCISSORS;
+			}
+		},
+		PAPER {
+			@Override Roshambo defeats() {
+				return ROCK;
+			}
+		},
+		SCISSORS {
+			@Override Roshambo defeats() {
+				return PAPER;
+			}
+		};
 
-    abstract Roshambo defeats();
-  }
+		abstract Roshambo defeats();
+	}
 
-  private static class MyEnumTypeAdapter
-      implements JsonSerializer<Roshambo>, JsonDeserializer<Roshambo> {
-    public JsonElement serialize(Roshambo src, Type typeOfSrc, JsonSerializationContext context) {
-      return new JsonPrimitive("123" + src.name());
-    }
+	private static class MyEnumTypeAdapter
+		implements JsonSerializer<Roshambo>, JsonDeserializer<Roshambo> {
+		public JsonElement serialize(Roshambo src, Type typeOfSrc, JsonSerializationContext context) {
+			return new JsonPrimitive("123" + src.name());
+		}
 
-    public Roshambo deserialize(JsonElement json, Type classOfT, JsonDeserializationContext context)
-        throws JsonParseException {
-      return Roshambo.valueOf(json.getAsString().substring(3));
-    }
-  }
+		public Roshambo deserialize(JsonElement json, Type classOfT, JsonDeserializationContext context)
+		throws JsonParseException {
+			return Roshambo.valueOf(json.getAsString().substring(3));
+		}
+	}
 }

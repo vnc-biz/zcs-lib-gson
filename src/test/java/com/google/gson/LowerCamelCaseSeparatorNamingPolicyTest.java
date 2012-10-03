@@ -25,35 +25,35 @@ import junit.framework.TestCase;
  */
 public class LowerCamelCaseSeparatorNamingPolicyTest extends TestCase {
 
-  private static final Class<String> CLASS = String.class;
-  private static final String UNDERSCORE = "_";
+	private static final Class<String> CLASS = String.class;
+	private static final String UNDERSCORE = "_";
 
-  private LowerCamelCaseSeparatorNamingPolicy namingPolicy;
+	private LowerCamelCaseSeparatorNamingPolicy namingPolicy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    namingPolicy = new LowerCamelCaseSeparatorNamingPolicy(UNDERSCORE);
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		namingPolicy = new LowerCamelCaseSeparatorNamingPolicy(UNDERSCORE);
+	}
 
-  public void testNameBeginsWithLowerCase() throws Exception {
-    String translatedName = namingPolicy.translateName("testNameBeginsWithLower", CLASS, null);
-    assertEquals("test_name_begins_with_lower", translatedName);
-  }
+	public void testNameBeginsWithLowerCase() throws Exception {
+		String translatedName = namingPolicy.translateName("testNameBeginsWithLower", CLASS, null);
+		assertEquals("test_name_begins_with_lower", translatedName);
+	}
 
-  public void testNameBeginsWithUpperCase() throws Exception {
-    String translatedName = namingPolicy.translateName("TestNameBeginsWithUpper", CLASS, null);
-    assertEquals("test_name_begins_with_upper", translatedName);
-  }
+	public void testNameBeginsWithUpperCase() throws Exception {
+		String translatedName = namingPolicy.translateName("TestNameBeginsWithUpper", CLASS, null);
+		assertEquals("test_name_begins_with_upper", translatedName);
+	}
 
-  public void testExceptionPossiblyIncorrectSeparation() throws Exception {
-    String translatedName = namingPolicy.translateName("aURL", CLASS, null);
-    assertEquals("a_u_r_l", translatedName);
-  }
-  
-  public void testUsingDashesInstead() throws Exception {
-    namingPolicy = new LowerCamelCaseSeparatorNamingPolicy("-");
-    String translatedName = namingPolicy.translateName("testUsingDashesInstead", CLASS, null);
-    assertEquals("test-using-dashes-instead", translatedName);
-  }
+	public void testExceptionPossiblyIncorrectSeparation() throws Exception {
+		String translatedName = namingPolicy.translateName("aURL", CLASS, null);
+		assertEquals("a_u_r_l", translatedName);
+	}
+
+	public void testUsingDashesInstead() throws Exception {
+		namingPolicy = new LowerCamelCaseSeparatorNamingPolicy("-");
+		String translatedName = namingPolicy.translateName("testUsingDashesInstead", CLASS, null);
+		assertEquals("test-using-dashes-instead", translatedName);
+	}
 }

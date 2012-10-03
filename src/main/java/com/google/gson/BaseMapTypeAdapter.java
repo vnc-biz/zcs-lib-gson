@@ -26,19 +26,19 @@ import java.util.Map;
  * @author Joel Leitch
  */
 abstract class BaseMapTypeAdapter
-    implements JsonSerializer<Map<?, ?>>, JsonDeserializer<Map<?, ?>> {
+	implements JsonSerializer<Map<?, ?>>, JsonDeserializer<Map<?, ?>> {
 
-  protected static final JsonElement serialize(JsonSerializationContext context,
-      Object src, Type srcType) {
-    JsonSerializationContextDefault contextImpl = (JsonSerializationContextDefault) context;
-    return contextImpl.serialize(src, srcType, false);
-  }
+	protected static final JsonElement serialize(JsonSerializationContext context,
+	        Object src, Type srcType) {
+		JsonSerializationContextDefault contextImpl = (JsonSerializationContextDefault) context;
+		return contextImpl.serialize(src, srcType, false);
+	}
 
-  @SuppressWarnings("unchecked")
-  protected static final Map<Object, Object> constructMapType(
-      Type mapType, JsonDeserializationContext context) {
-    JsonDeserializationContextDefault contextImpl = (JsonDeserializationContextDefault) context;
-    ObjectConstructor objectConstructor = contextImpl.getObjectConstructor();
-    return (Map<Object, Object>) objectConstructor.construct(mapType);
-  }
+	@SuppressWarnings("unchecked")
+	protected static final Map<Object, Object> constructMapType(
+	    Type mapType, JsonDeserializationContext context) {
+		JsonDeserializationContextDefault contextImpl = (JsonDeserializationContextDefault) context;
+		ObjectConstructor objectConstructor = contextImpl.getObjectConstructor();
+		return (Map<Object, Object>) objectConstructor.construct(mapType);
+	}
 }

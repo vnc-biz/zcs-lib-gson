@@ -28,39 +28,39 @@ import java.util.List;
  */
 public class DisjunctionExclusionStrategyTest extends TestCase {
 
-  private static final ExclusionStrategy FALSE_STRATEGY = 
-      new MockExclusionStrategy(false, false);
-  private static final ExclusionStrategy TRUE_STRATEGY = 
-      new MockExclusionStrategy(true, true);
-  
-  private static final Class<?> CLAZZ = String.class;
-  private static final FieldAttributes FIELD =
-    new FieldAttributes(CLAZZ, CLAZZ.getFields()[0], CLAZZ);
+	private static final ExclusionStrategy FALSE_STRATEGY =
+	    new MockExclusionStrategy(false, false);
+	private static final ExclusionStrategy TRUE_STRATEGY =
+	    new MockExclusionStrategy(true, true);
 
-  public void testBadInstantiation() throws Exception {
-    try {
-      List<ExclusionStrategy> constructorParam = null;
-      new DisjunctionExclusionStrategy(constructorParam);
-      fail("Should throw an exception");
-    } catch (NullPointerException expected) { }
-  }
+	private static final Class<?> CLAZZ = String.class;
+	private static final FieldAttributes FIELD =
+	    new FieldAttributes(CLAZZ, CLAZZ.getFields()[0], CLAZZ);
 
-  public void testSkipFieldsWithMixedTrueAndFalse() throws Exception {
-    List<ExclusionStrategy> strategies = new LinkedList<ExclusionStrategy>();
-    strategies.add(FALSE_STRATEGY);
-    strategies.add(TRUE_STRATEGY);
-    DisjunctionExclusionStrategy strategy = new DisjunctionExclusionStrategy(strategies);
+	public void testBadInstantiation() throws Exception {
+		try {
+			List<ExclusionStrategy> constructorParam = null;
+			new DisjunctionExclusionStrategy(constructorParam);
+			fail("Should throw an exception");
+		} catch (NullPointerException expected) { }
+	}
 
-    assertTrue(strategy.shouldSkipClass(CLAZZ));
-    assertTrue(strategy.shouldSkipField(FIELD));
-  }
+	public void testSkipFieldsWithMixedTrueAndFalse() throws Exception {
+		List<ExclusionStrategy> strategies = new LinkedList<ExclusionStrategy>();
+		strategies.add(FALSE_STRATEGY);
+		strategies.add(TRUE_STRATEGY);
+		DisjunctionExclusionStrategy strategy = new DisjunctionExclusionStrategy(strategies);
 
-  public void testSkipFieldsWithFalseOnly() throws Exception {
-    List<ExclusionStrategy> strategies = new LinkedList<ExclusionStrategy>();
-    strategies.add(FALSE_STRATEGY);
-    DisjunctionExclusionStrategy strategy =  new DisjunctionExclusionStrategy(strategies);
+		assertTrue(strategy.shouldSkipClass(CLAZZ));
+		assertTrue(strategy.shouldSkipField(FIELD));
+	}
 
-    assertFalse(strategy.shouldSkipClass(CLAZZ));
-    assertFalse(strategy.shouldSkipField(FIELD));
-  }
+	public void testSkipFieldsWithFalseOnly() throws Exception {
+		List<ExclusionStrategy> strategies = new LinkedList<ExclusionStrategy>();
+		strategies.add(FALSE_STRATEGY);
+		DisjunctionExclusionStrategy strategy =  new DisjunctionExclusionStrategy(strategies);
+
+		assertFalse(strategy.shouldSkipClass(CLAZZ));
+		assertFalse(strategy.shouldSkipField(FIELD));
+	}
 }

@@ -25,36 +25,36 @@ import junit.framework.TestCase;
  */
 public class UpperCamelCaseSeparatorNamingPolicyTest extends TestCase {
 
-  private UpperCamelCaseSeparatorNamingPolicy namingPolicy;
+	private UpperCamelCaseSeparatorNamingPolicy namingPolicy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    namingPolicy = new UpperCamelCaseSeparatorNamingPolicy(" ");
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		namingPolicy = new UpperCamelCaseSeparatorNamingPolicy(" ");
+	}
 
-  public void testAllLowerCase() throws Exception {
-    assertEquals("Some Field Name", 
-        namingPolicy.translateName("someFieldName", String.class, null));
-  }
+	public void testAllLowerCase() throws Exception {
+		assertEquals("Some Field Name",
+		             namingPolicy.translateName("someFieldName", String.class, null));
+	}
 
-  public void testAllUpperCase() throws Exception {
-    assertEquals("U R L", 
-        namingPolicy.translateName("URL", String.class, null));
-  }
-  
-  public void testAllUpperCaseExceptFirst() throws Exception {
-    assertEquals("U R L", 
-        namingPolicy.translateName("uRL", String.class, null));
-  }
-  
-  public void testAllUpperCaseStartingWithUnderscore() throws Exception {
-    assertEquals("_U R L", 
-        namingPolicy.translateName("_uRL", String.class, null));
-  }
+	public void testAllUpperCase() throws Exception {
+		assertEquals("U R L",
+		             namingPolicy.translateName("URL", String.class, null));
+	}
 
-  public void testMixedCase() throws Exception {
-    assertEquals("_Some Field Name", 
-        namingPolicy.translateName("_someFieldName", String.class, null));
-  }
+	public void testAllUpperCaseExceptFirst() throws Exception {
+		assertEquals("U R L",
+		             namingPolicy.translateName("uRL", String.class, null));
+	}
+
+	public void testAllUpperCaseStartingWithUnderscore() throws Exception {
+		assertEquals("_U R L",
+		             namingPolicy.translateName("_uRL", String.class, null));
+	}
+
+	public void testMixedCase() throws Exception {
+		assertEquals("_Some Field Name",
+		             namingPolicy.translateName("_someFieldName", String.class, null));
+	}
 }

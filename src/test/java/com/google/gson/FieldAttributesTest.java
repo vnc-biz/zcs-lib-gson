@@ -31,52 +31,52 @@ import java.util.List;
  * @author Joel Leitch
  */
 public class FieldAttributesTest extends TestCase {
-  private FieldAttributes fieldAttributes;
+	private FieldAttributes fieldAttributes;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    fieldAttributes = new FieldAttributes(Foo.class, Foo.class.getField("bar"), Foo.class);
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		fieldAttributes = new FieldAttributes(Foo.class, Foo.class.getField("bar"), Foo.class);
+	}
 
-  public void testNullField() throws Exception {
-    try {
-      new FieldAttributes(Foo.class, null, Foo.class);
-      fail("Field parameter can not be null");
-    } catch (NullPointerException expected) { }
-  }
+	public void testNullField() throws Exception {
+		try {
+			new FieldAttributes(Foo.class, null, Foo.class);
+			fail("Field parameter can not be null");
+		} catch (NullPointerException expected) { }
+	}
 
-  public void testDeclaringClass() throws Exception {
-    assertEquals(Foo.class, fieldAttributes.getDeclaringClass());
-  }
+	public void testDeclaringClass() throws Exception {
+		assertEquals(Foo.class, fieldAttributes.getDeclaringClass());
+	}
 
-  public void testModifiers() throws Exception {
-    assertFalse(fieldAttributes.hasModifier(Modifier.STATIC));
-    assertFalse(fieldAttributes.hasModifier(Modifier.FINAL));
-    assertFalse(fieldAttributes.hasModifier(Modifier.ABSTRACT));
-    assertFalse(fieldAttributes.hasModifier(Modifier.VOLATILE));
-    assertFalse(fieldAttributes.hasModifier(Modifier.PROTECTED));
+	public void testModifiers() throws Exception {
+		assertFalse(fieldAttributes.hasModifier(Modifier.STATIC));
+		assertFalse(fieldAttributes.hasModifier(Modifier.FINAL));
+		assertFalse(fieldAttributes.hasModifier(Modifier.ABSTRACT));
+		assertFalse(fieldAttributes.hasModifier(Modifier.VOLATILE));
+		assertFalse(fieldAttributes.hasModifier(Modifier.PROTECTED));
 
-    assertTrue(fieldAttributes.hasModifier(Modifier.PUBLIC));
-    assertTrue(fieldAttributes.hasModifier(Modifier.TRANSIENT));
-  }
+		assertTrue(fieldAttributes.hasModifier(Modifier.PUBLIC));
+		assertTrue(fieldAttributes.hasModifier(Modifier.TRANSIENT));
+	}
 
-  public void testIsSynthetic() throws Exception {
-    assertFalse(fieldAttributes.isSynthetic());
-  }
+	public void testIsSynthetic() throws Exception {
+		assertFalse(fieldAttributes.isSynthetic());
+	}
 
-  public void testName() throws Exception {
-    assertEquals("bar", fieldAttributes.getName());
-  }
+	public void testName() throws Exception {
+		assertEquals("bar", fieldAttributes.getName());
+	}
 
-  public void testDeclaredTypeAndClass() throws Exception {
-    Type expectedType = new TypeToken<List<String>>() {}.getType();
-    assertEquals(expectedType, fieldAttributes.getDeclaredType());
-    assertEquals(List.class, fieldAttributes.getDeclaredClass());
-  }
+	public void testDeclaredTypeAndClass() throws Exception {
+		Type expectedType = new TypeToken<List<String>>() {} .getType();
+		assertEquals(expectedType, fieldAttributes.getDeclaredType());
+		assertEquals(List.class, fieldAttributes.getDeclaredClass());
+	}
 
-  private static class Foo {
-    @SuppressWarnings("unused")
-    public transient List<String> bar;
-  }
+	private static class Foo {
+		@SuppressWarnings("unused")
+		public transient List<String> bar;
+	}
 }

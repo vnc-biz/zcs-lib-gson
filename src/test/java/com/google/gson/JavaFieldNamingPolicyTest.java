@@ -25,23 +25,23 @@ import junit.framework.TestCase;
  */
 public class JavaFieldNamingPolicyTest extends TestCase {
 
-  private JavaFieldNamingPolicy namingPolicy;
+	private JavaFieldNamingPolicy namingPolicy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    namingPolicy = new JavaFieldNamingPolicy();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		namingPolicy = new JavaFieldNamingPolicy();
+	}
 
-  public void testFieldNamingPolicy() throws Exception {
-    FieldAttributes f = new FieldAttributes(String.class, String.class.getFields()[0], String.class);
-    assertEquals(f.getName(), namingPolicy.translateName(f));
-  }
+	public void testFieldNamingPolicy() throws Exception {
+		FieldAttributes f = new FieldAttributes(String.class, String.class.getFields()[0], String.class);
+		assertEquals(f.getName(), namingPolicy.translateName(f));
+	}
 
-  public void testNullField() throws Exception {
-    try {
-      namingPolicy.translateName((FieldAttributes) null);
-      fail("Should have thrown an exception");
-    } catch (NullPointerException expected) { }
-  }
+	public void testNullField() throws Exception {
+		try {
+			namingPolicy.translateName((FieldAttributes) null);
+			fail("Should have thrown an exception");
+		} catch (NullPointerException expected) { }
+	}
 }

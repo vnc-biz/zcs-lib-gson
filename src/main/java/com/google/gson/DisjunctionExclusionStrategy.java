@@ -27,27 +27,27 @@ import java.util.Collection;
  * @author Joel Leitch
  */
 final class DisjunctionExclusionStrategy implements ExclusionStrategy {
-  private final Collection<ExclusionStrategy> strategies;
+	private final Collection<ExclusionStrategy> strategies;
 
-  DisjunctionExclusionStrategy(Collection<ExclusionStrategy> strategies) {
-    this.strategies = $Gson$Preconditions.checkNotNull(strategies);
-  }
+	DisjunctionExclusionStrategy(Collection<ExclusionStrategy> strategies) {
+		this.strategies = $Gson$Preconditions.checkNotNull(strategies);
+	}
 
-  public boolean shouldSkipField(FieldAttributes f) {
-    for (ExclusionStrategy strategy : strategies) {
-      if (strategy.shouldSkipField(f)) {
-        return true;
-      }
-    }
-    return false;
-  }
+	public boolean shouldSkipField(FieldAttributes f) {
+		for (ExclusionStrategy strategy : strategies) {
+			if (strategy.shouldSkipField(f)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-  public boolean shouldSkipClass(Class<?> clazz) {
-    for (ExclusionStrategy strategy : strategies) {
-      if (strategy.shouldSkipClass(clazz)) {
-        return true;
-      }
-    }
-    return false;
-  }
+	public boolean shouldSkipClass(Class<?> clazz) {
+		for (ExclusionStrategy strategy : strategies) {
+			if (strategy.shouldSkipClass(clazz)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

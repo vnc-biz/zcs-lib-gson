@@ -1,21 +1,41 @@
 <assembly>
-  <id>release</id>
-  <formats>
-    <format>zip</format>
-  </formats>
-  <fileSets>
-    <fileSet>
-      <includes>
-        <include>README*</include>
-        <include>LICENSE*</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>target</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>gson-*.jar</include>
-      </includes>
-    </fileSet>
-  </fileSets>
+	
+	<id>release</id>
+	
+	<formats>
+		
+		<format>zip</format>
+		
+	</formats>
+	
+	<fileSets>
+		
+		<fileSet>
+			
+			<includes>
+				
+				<include>README*</include>
+				
+				<include>LICENSE*</include>
+				
+			</includes>
+			
+		</fileSet>
+		
+		<fileSet>
+			
+			<directory>target</directory>
+			
+			<outputDirectory></outputDirectory>
+			
+			<includes>
+				
+				<include>gson-*.jar</include>
+				
+			</includes>
+			
+		</fileSet>
+		
+	</fileSets>
+	
 </assembly>

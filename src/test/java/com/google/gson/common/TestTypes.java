@@ -35,375 +35,375 @@ import java.lang.reflect.Type;
  * @author Joel Leitch
  */
 public class TestTypes {
-  
-  public static class Base {
-    public static final String BASE_NAME = Base.class.getSimpleName();
-    public static final String BASE_FIELD_KEY = "baseName";
-    public static final String SERIALIZER_KEY = "serializerName";
-    public String baseName = BASE_NAME;
-    public String serializerName;
-  }
 
-  public static class Sub extends Base {
-    public static final String SUB_NAME = Sub.class.getSimpleName();
-    public static final String SUB_FIELD_KEY = "subName";
-    public final String subName = SUB_NAME;
-  }
+	public static class Base {
+		public static final String BASE_NAME = Base.class.getSimpleName();
+		public static final String BASE_FIELD_KEY = "baseName";
+		public static final String SERIALIZER_KEY = "serializerName";
+		public String baseName = BASE_NAME;
+		public String serializerName;
+	}
 
-  public static class ClassWithBaseField {
-    public static final String FIELD_KEY = "base";
-    public final Base base;
-    public ClassWithBaseField(Base base) {
-      this.base = base;
-    }
-  }
+	public static class Sub extends Base {
+		public static final String SUB_NAME = Sub.class.getSimpleName();
+		public static final String SUB_FIELD_KEY = "subName";
+		public final String subName = SUB_NAME;
+	}
 
-  public static class ClassWithBaseArrayField {
-    public static final String FIELD_KEY = "base";
-    public final Base[] base;
-    public ClassWithBaseArrayField(Base[] base) {
-      this.base = base;
-    }
-  }
+	public static class ClassWithBaseField {
+		public static final String FIELD_KEY = "base";
+		public final Base base;
+		public ClassWithBaseField(Base base) {
+			this.base = base;
+		}
+	}
 
-  public static class BaseSerializer implements JsonSerializer<Base> {
-    public static final String NAME = BaseSerializer.class.getSimpleName(); 
-    public JsonElement serialize(Base src, Type typeOfSrc, JsonSerializationContext context) {
-      JsonObject obj = new JsonObject();
-      obj.addProperty(Base.SERIALIZER_KEY, NAME);
-      return obj;
-    }    
-  }
-  public static class SubSerializer implements JsonSerializer<Sub> {
-    public static final String NAME = SubSerializer.class.getSimpleName(); 
-    public JsonElement serialize(Sub src, Type typeOfSrc, JsonSerializationContext context) {
-      JsonObject obj = new JsonObject();
-      obj.addProperty(Base.SERIALIZER_KEY, NAME);
-      return obj;
-    }    
-  }
+	public static class ClassWithBaseArrayField {
+		public static final String FIELD_KEY = "base";
+		public final Base[] base;
+		public ClassWithBaseArrayField(Base[] base) {
+			this.base = base;
+		}
+	}
 
-  public static class StringWrapper {
-    public final String someConstantStringInstanceField;
+	public static class BaseSerializer implements JsonSerializer<Base> {
+		public static final String NAME = BaseSerializer.class.getSimpleName();
+		public JsonElement serialize(Base src, Type typeOfSrc, JsonSerializationContext context) {
+			JsonObject obj = new JsonObject();
+			obj.addProperty(Base.SERIALIZER_KEY, NAME);
+			return obj;
+		}
+	}
+	public static class SubSerializer implements JsonSerializer<Sub> {
+		public static final String NAME = SubSerializer.class.getSimpleName();
+		public JsonElement serialize(Sub src, Type typeOfSrc, JsonSerializationContext context) {
+			JsonObject obj = new JsonObject();
+			obj.addProperty(Base.SERIALIZER_KEY, NAME);
+			return obj;
+		}
+	}
 
-    public StringWrapper(String value) {
-      someConstantStringInstanceField = value;
-    }
-  }
+	public static class StringWrapper {
+		public final String someConstantStringInstanceField;
 
-  public static class BagOfPrimitives {
-    public static final long DEFAULT_VALUE = 0;
-    public long longValue;
-    public int intValue;
-    public boolean booleanValue;
-    public String stringValue;
+		public StringWrapper(String value) {
+			someConstantStringInstanceField = value;
+		}
+	}
 
-    public BagOfPrimitives() {
-      this(DEFAULT_VALUE, 0, false, "");
-    }
+	public static class BagOfPrimitives {
+		public static final long DEFAULT_VALUE = 0;
+		public long longValue;
+		public int intValue;
+		public boolean booleanValue;
+		public String stringValue;
 
-    public BagOfPrimitives(long longValue, int intValue, boolean booleanValue, String stringValue) {
-      this.longValue = longValue;
-      this.intValue = intValue;
-      this.booleanValue = booleanValue;
-      this.stringValue = stringValue;
-    }
+		public BagOfPrimitives() {
+			this(DEFAULT_VALUE, 0, false, "");
+		}
 
-    public int getIntValue() {
-      return intValue;
-    }
+		public BagOfPrimitives(long longValue, int intValue, boolean booleanValue, String stringValue) {
+			this.longValue = longValue;
+			this.intValue = intValue;
+			this.booleanValue = booleanValue;
+			this.stringValue = stringValue;
+		}
 
-    public String getExpectedJson() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("{");
-      sb.append("\"longValue\":").append(longValue).append(",");
-      sb.append("\"intValue\":").append(intValue).append(",");
-      sb.append("\"booleanValue\":").append(booleanValue).append(",");
-      sb.append("\"stringValue\":\"").append(stringValue).append("\"");
-      sb.append("}");
-      return sb.toString();
-    }
+		public int getIntValue() {
+			return intValue;
+		}
 
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + (booleanValue ? 1231 : 1237);
-      result = prime * result + intValue;
-      result = prime * result + (int) (longValue ^ (longValue >>> 32));
-      result = prime * result + ((stringValue == null) ? 0 : stringValue.hashCode());
-      return result;
-    }
+		public String getExpectedJson() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("{");
+			sb.append("\"longValue\":").append(longValue).append(",");
+			sb.append("\"intValue\":").append(intValue).append(",");
+			sb.append("\"booleanValue\":").append(booleanValue).append(",");
+			sb.append("\"stringValue\":\"").append(stringValue).append("\"");
+			sb.append("}");
+			return sb.toString();
+		}
 
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      BagOfPrimitives other = (BagOfPrimitives) obj;
-      if (booleanValue != other.booleanValue)
-        return false;
-      if (intValue != other.intValue)
-        return false;
-      if (longValue != other.longValue)
-        return false;
-      if (stringValue == null) {
-        if (other.stringValue != null)
-          return false;
-      } else if (!stringValue.equals(other.stringValue))
-        return false;
-      return true;
-    }
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + (booleanValue ? 1231 : 1237);
+			result = prime * result + intValue;
+			result = prime * result + (int) (longValue ^ (longValue >>> 32));
+			result = prime * result + ((stringValue == null) ? 0 : stringValue.hashCode());
+			return result;
+		}
 
-    @Override
-    public String toString() {
-      return String.format("(longValue=%d,intValue=%d,booleanValue=%b,stringValue=%s)",
-          longValue, intValue, booleanValue, stringValue);
-    }
-  }
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			BagOfPrimitives other = (BagOfPrimitives) obj;
+			if (booleanValue != other.booleanValue)
+				return false;
+			if (intValue != other.intValue)
+				return false;
+			if (longValue != other.longValue)
+				return false;
+			if (stringValue == null) {
+				if (other.stringValue != null)
+					return false;
+			} else if (!stringValue.equals(other.stringValue))
+				return false;
+			return true;
+		}
 
-  public static class BagOfPrimitiveWrappers {
-    private final Long longValue;
-    private final Integer intValue;
-    private final Boolean booleanValue;
+		@Override
+		public String toString() {
+			return String.format("(longValue=%d,intValue=%d,booleanValue=%b,stringValue=%s)",
+			                     longValue, intValue, booleanValue, stringValue);
+		}
+	}
 
-    public BagOfPrimitiveWrappers(Long longValue, Integer intValue, Boolean booleanValue) {
-      this.longValue = longValue;
-      this.intValue = intValue;
-      this.booleanValue = booleanValue;
-    }
+	public static class BagOfPrimitiveWrappers {
+		private final Long longValue;
+		private final Integer intValue;
+		private final Boolean booleanValue;
 
-    public String getExpectedJson() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("{");
-      sb.append("\"longValue\":").append(longValue).append(",");
-      sb.append("\"intValue\":").append(intValue).append(",");
-      sb.append("\"booleanValue\":").append(booleanValue);
-      sb.append("}");
-      return sb.toString();
-    }
-  }
+		public BagOfPrimitiveWrappers(Long longValue, Integer intValue, Boolean booleanValue) {
+			this.longValue = longValue;
+			this.intValue = intValue;
+			this.booleanValue = booleanValue;
+		}
 
-  public static class PrimitiveArray {
-    private final long[] longArray;
+		public String getExpectedJson() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("{");
+			sb.append("\"longValue\":").append(longValue).append(",");
+			sb.append("\"intValue\":").append(intValue).append(",");
+			sb.append("\"booleanValue\":").append(booleanValue);
+			sb.append("}");
+			return sb.toString();
+		}
+	}
 
-    public PrimitiveArray() {
-      this(new long[0]);
-    }
+	public static class PrimitiveArray {
+		private final long[] longArray;
 
-    public PrimitiveArray(long[] longArray) {
-      this.longArray = longArray;
-    }
+		public PrimitiveArray() {
+			this(new long[0]);
+		}
 
-    public String getExpectedJson() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("{\"longArray\":[");
+		public PrimitiveArray(long[] longArray) {
+			this.longArray = longArray;
+		}
 
-      boolean first = true;
-      for (long l : longArray) {
-        if (!first) {
-          sb.append(",");
-        } else {
-          first = false;
-        }
-        sb.append(l);
-      }
+		public String getExpectedJson() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("{\"longArray\":[");
 
-      sb.append("]}");
-      return sb.toString();
-    }
-  }
+			boolean first = true;
+			for (long l : longArray) {
+				if (!first) {
+					sb.append(",");
+				} else {
+					first = false;
+				}
+				sb.append(l);
+			}
 
-  public static class ClassWithNoFields {
-    // Nothing here.. .
-    @Override
-    public boolean equals(Object other) {
-      return other.getClass() == ClassWithNoFields.class;
-    }
-  }
+			sb.append("]}");
+			return sb.toString();
+		}
+	}
 
-  public static class Nested {
-    private final BagOfPrimitives primitive1;
-    private final BagOfPrimitives primitive2;
+	public static class ClassWithNoFields {
+		// Nothing here.. .
+		@Override
+		public boolean equals(Object other) {
+			return other.getClass() == ClassWithNoFields.class;
+		}
+	}
 
-    public Nested() {
-      this(null, null);
-    }
+	public static class Nested {
+		private final BagOfPrimitives primitive1;
+		private final BagOfPrimitives primitive2;
 
-    public Nested(BagOfPrimitives primitive1, BagOfPrimitives primitive2) {
-      this.primitive1 = primitive1;
-      this.primitive2 = primitive2;
-    }
+		public Nested() {
+			this(null, null);
+		}
 
-    public String getExpectedJson() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("{");
-      appendFields(sb);
-      sb.append("}");
-      return sb.toString();
-    }
+		public Nested(BagOfPrimitives primitive1, BagOfPrimitives primitive2) {
+			this.primitive1 = primitive1;
+			this.primitive2 = primitive2;
+		}
 
-    public void appendFields(StringBuilder sb) {
-      if (primitive1 != null) {
-        sb.append("\"primitive1\":").append(primitive1.getExpectedJson());
-      }
-      if (primitive1 != null && primitive2 != null) {
-        sb.append(",");
-      }
-      if (primitive2 != null) {
-        sb.append("\"primitive2\":").append(primitive2.getExpectedJson());
-      }
-    }
-  }
+		public String getExpectedJson() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("{");
+			appendFields(sb);
+			sb.append("}");
+			return sb.toString();
+		}
 
-  public static class ClassWithTransientFields<T> {
-    public transient T transientT; 
-    public final transient long transientLongValue;
-    private final long[] longValue;
+		public void appendFields(StringBuilder sb) {
+			if (primitive1 != null) {
+				sb.append("\"primitive1\":").append(primitive1.getExpectedJson());
+			}
+			if (primitive1 != null && primitive2 != null) {
+				sb.append(",");
+			}
+			if (primitive2 != null) {
+				sb.append("\"primitive2\":").append(primitive2.getExpectedJson());
+			}
+		}
+	}
 
-    public ClassWithTransientFields() {
-      this(0L);
-    }
+	public static class ClassWithTransientFields<T> {
+		public transient T transientT;
+		public final transient long transientLongValue;
+		private final long[] longValue;
 
-    public ClassWithTransientFields(long value) {
-      longValue = new long[] { value };
-      transientLongValue = value + 1;
-    }
+		public ClassWithTransientFields() {
+			this(0L);
+		}
 
-    public String getExpectedJson() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("{");
-      sb.append("\"longValue\":[").append(longValue[0]).append("]");
-      sb.append("}");
-      return sb.toString();
-    }
-  }
+		public ClassWithTransientFields(long value) {
+			longValue = new long[] { value };
+			transientLongValue = value + 1;
+		}
 
-  public static class ClassWithCustomTypeConverter {
-    private final BagOfPrimitives bag;
-    private final int value;
+		public String getExpectedJson() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("{");
+			sb.append("\"longValue\":[").append(longValue[0]).append("]");
+			sb.append("}");
+			return sb.toString();
+		}
+	}
 
-    public ClassWithCustomTypeConverter() {
-      this(new BagOfPrimitives(), 10);
-    }
+	public static class ClassWithCustomTypeConverter {
+		private final BagOfPrimitives bag;
+		private final int value;
 
-    public ClassWithCustomTypeConverter(int value) {
-      this(new BagOfPrimitives(value, value, false, ""), value);
-    }
+		public ClassWithCustomTypeConverter() {
+			this(new BagOfPrimitives(), 10);
+		}
 
-    public ClassWithCustomTypeConverter(BagOfPrimitives bag, int value) {
-      this.bag = bag;
-      this.value = value;
-    }
+		public ClassWithCustomTypeConverter(int value) {
+			this(new BagOfPrimitives(value, value, false, ""), value);
+		}
 
-    public BagOfPrimitives getBag() {
-      return bag;
-    }
+		public ClassWithCustomTypeConverter(BagOfPrimitives bag, int value) {
+			this.bag = bag;
+			this.value = value;
+		}
 
-    public String getExpectedJson() {
-      return "{\"url\":\"" + bag.getExpectedJson() + "\",\"value\":" + value + "}";
-    }
+		public BagOfPrimitives getBag() {
+			return bag;
+		}
 
-    public int getValue() {
-      return value;
-    }
-  }
+		public String getExpectedJson() {
+			return "{\"url\":\"" + bag.getExpectedJson() + "\",\"value\":" + value + "}";
+		}
 
-  public static class ArrayOfObjects {
-    private final BagOfPrimitives[] elements;
-    public ArrayOfObjects() {
-      elements = new BagOfPrimitives[3];
-      for (int i = 0; i < elements.length; ++i) {
-        elements[i] = new BagOfPrimitives(i, i+2, false, "i"+i);
-      }
-    }
-    public String getExpectedJson() {
-      StringBuilder sb = new StringBuilder("{\"elements\":[");
-      boolean first = true;
-      for (BagOfPrimitives element : elements) {
-        if (first) {
-          first = false;
-        } else {
-          sb.append(",");
-        }
-        sb.append(element.getExpectedJson());
-      }
-      sb.append("]}");
-      return sb.toString();
-    }
-  }
+		public int getValue() {
+			return value;
+		}
+	}
 
-  public static class ClassOverridingEquals {
-    public ClassOverridingEquals ref;
+	public static class ArrayOfObjects {
+		private final BagOfPrimitives[] elements;
+		public ArrayOfObjects() {
+			elements = new BagOfPrimitives[3];
+			for (int i = 0; i < elements.length; ++i) {
+				elements[i] = new BagOfPrimitives(i, i+2, false, "i"+i);
+			}
+		}
+		public String getExpectedJson() {
+			StringBuilder sb = new StringBuilder("{\"elements\":[");
+			boolean first = true;
+			for (BagOfPrimitives element : elements) {
+				if (first) {
+					first = false;
+				} else {
+					sb.append(",");
+				}
+				sb.append(element.getExpectedJson());
+			}
+			sb.append("]}");
+			return sb.toString();
+		}
+	}
 
-    public String getExpectedJson() {
-      if (ref == null) {
-        return "{}";
-      }
-      return "{\"ref\":" + ref.getExpectedJson() + "}";
-    }
-    @Override
-    public boolean equals(Object obj) {
-      return true;
-    }
+	public static class ClassOverridingEquals {
+		public ClassOverridingEquals ref;
 
-    @Override
-    public int hashCode() {
-      return 1;
-    }
-  }
+		public String getExpectedJson() {
+			if (ref == null) {
+				return "{}";
+			}
+			return "{\"ref\":" + ref.getExpectedJson() + "}";
+		}
+		@Override
+		public boolean equals(Object obj) {
+			return true;
+		}
 
-  public static class ClassWithArray {
-    public final Object[] array;
-    public ClassWithArray() {
-      array = null;
-    }
+		@Override
+		public int hashCode() {
+			return 1;
+		}
+	}
 
-    public ClassWithArray(Object[] array) {
-      this.array = array;
-    }
-  }
+	public static class ClassWithArray {
+		public final Object[] array;
+		public ClassWithArray() {
+			array = null;
+		}
 
-  public static class ClassWithObjects {
-    public final BagOfPrimitives bag;
-    public ClassWithObjects() {
-      this(new BagOfPrimitives());
-    }
-    public ClassWithObjects(BagOfPrimitives bag) {
-      this.bag = bag;
-    }
-  }
+		public ClassWithArray(Object[] array) {
+			this.array = array;
+		}
+	}
 
-  public static class ClassWithSerializedNameFields {
-    @SerializedName("fooBar") public final int f;
-    @SerializedName("Another Foo") public final int g;
+	public static class ClassWithObjects {
+		public final BagOfPrimitives bag;
+		public ClassWithObjects() {
+			this(new BagOfPrimitives());
+		}
+		public ClassWithObjects(BagOfPrimitives bag) {
+			this.bag = bag;
+		}
+	}
 
-    public ClassWithSerializedNameFields() {
-      this(1, 4);
-    }
-    public ClassWithSerializedNameFields(int f, int g) {
-      this.f = f;
-      this.g = g;
-    }
+	public static class ClassWithSerializedNameFields {
+		@SerializedName("fooBar") public final int f;
+		@SerializedName("Another Foo") public final int g;
 
-    public String getExpectedJson() {
-      return '{' + "\"fooBar\":" + f + ",\"Another Foo\":" + g + '}';
-    }
-  }
-  
-  public static class CrazyLongTypeAdapter
-      implements JsonSerializer<Long>, JsonDeserializer<Long> {
-    public static final long DIFFERENCE = 5L;
-    public JsonElement serialize(Long src, Type typeOfSrc, JsonSerializationContext context) {
-      return new JsonPrimitive(src + DIFFERENCE);
-    }
-    
-    public Long deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-        throws JsonParseException {
-      return json.getAsLong() - DIFFERENCE;
-    }
-}
+		public ClassWithSerializedNameFields() {
+			this(1, 4);
+		}
+		public ClassWithSerializedNameFields(int f, int g) {
+			this.f = f;
+			this.g = g;
+		}
+
+		public String getExpectedJson() {
+			return '{' + "\"fooBar\":" + f + ",\"Another Foo\":" + g + '}';
+		}
+	}
+
+	public static class CrazyLongTypeAdapter
+		implements JsonSerializer<Long>, JsonDeserializer<Long> {
+		public static final long DIFFERENCE = 5L;
+		public JsonElement serialize(Long src, Type typeOfSrc, JsonSerializationContext context) {
+			return new JsonPrimitive(src + DIFFERENCE);
+		}
+
+		public Long deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+		throws JsonParseException {
+			return json.getAsLong() - DIFFERENCE;
+		}
+	}
 }

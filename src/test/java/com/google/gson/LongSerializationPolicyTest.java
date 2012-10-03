@@ -26,23 +26,23 @@ import junit.framework.TestCase;
  */
 public class LongSerializationPolicyTest extends TestCase {
 
-  public void testDefaultLongSerialization() throws Exception {
-    JsonElement element = LongSerializationPolicy.DEFAULT.serialize(1556L);
-    assertTrue(element.isJsonPrimitive());
-    
-    JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
-    assertFalse(jsonPrimitive.isString());
-    assertTrue(jsonPrimitive.isNumber());
-    assertEquals(1556L, element.getAsLong());
-  }
-  
-  public void testStringLongSerialization() throws Exception {
-    JsonElement element = LongSerializationPolicy.STRING.serialize(1556L);
-    assertTrue(element.isJsonPrimitive());
-    
-    JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
-    assertFalse(jsonPrimitive.isNumber());
-    assertTrue(jsonPrimitive.isString());
-    assertEquals("1556", element.getAsString());
-  }
+	public void testDefaultLongSerialization() throws Exception {
+		JsonElement element = LongSerializationPolicy.DEFAULT.serialize(1556L);
+		assertTrue(element.isJsonPrimitive());
+
+		JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
+		assertFalse(jsonPrimitive.isString());
+		assertTrue(jsonPrimitive.isNumber());
+		assertEquals(1556L, element.getAsLong());
+	}
+
+	public void testStringLongSerialization() throws Exception {
+		JsonElement element = LongSerializationPolicy.STRING.serialize(1556L);
+		assertTrue(element.isJsonPrimitive());
+
+		JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
+		assertFalse(jsonPrimitive.isNumber());
+		assertTrue(jsonPrimitive.isString());
+		assertEquals("1556", element.getAsString());
+	}
 }

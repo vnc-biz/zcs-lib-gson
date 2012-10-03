@@ -33,18 +33,18 @@ import com.google.gson.common.TestTypes.ClassWithNoFields;
  */
 public class FunctionWithInternalDependenciesTest extends TestCase {
 
-  public void testAnonymousLocalClassesSerialization() throws Exception {
-    LinkedList<ExclusionStrategy> strategies = new LinkedList<ExclusionStrategy>();
-    strategies.add(new SyntheticFieldExclusionStrategy(true));
-    strategies.add(new ModifierBasedExclusionStrategy(Modifier.TRANSIENT, Modifier.STATIC));
-    ExclusionStrategy exclusionStrategy = new DisjunctionExclusionStrategy(strategies);
-    Gson gson = new Gson(exclusionStrategy, exclusionStrategy, Gson.DEFAULT_NAMING_POLICY,
-        new MappedObjectConstructor(DefaultTypeAdapters.getDefaultInstanceCreators()),
-        false, DefaultTypeAdapters.getDefaultSerializers(),
-        DefaultTypeAdapters.getDefaultDeserializers(), Gson.DEFAULT_JSON_NON_EXECUTABLE, true,
-        false);
-    assertEquals("{}", gson.toJson(new ClassWithNoFields() {
-      // empty anonymous class
-    }));
-  }
+	public void testAnonymousLocalClassesSerialization() throws Exception {
+		LinkedList<ExclusionStrategy> strategies = new LinkedList<ExclusionStrategy>();
+		strategies.add(new SyntheticFieldExclusionStrategy(true));
+		strategies.add(new ModifierBasedExclusionStrategy(Modifier.TRANSIENT, Modifier.STATIC));
+		ExclusionStrategy exclusionStrategy = new DisjunctionExclusionStrategy(strategies);
+		Gson gson = new Gson(exclusionStrategy, exclusionStrategy, Gson.DEFAULT_NAMING_POLICY,
+		                     new MappedObjectConstructor(DefaultTypeAdapters.getDefaultInstanceCreators()),
+		                     false, DefaultTypeAdapters.getDefaultSerializers(),
+		                     DefaultTypeAdapters.getDefaultDeserializers(), Gson.DEFAULT_JSON_NON_EXECUTABLE, true,
+		                     false);
+		assertEquals("{}", gson.toJson(new ClassWithNoFields() {
+			// empty anonymous class
+		}));
+	}
 }

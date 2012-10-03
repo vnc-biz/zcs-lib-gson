@@ -26,27 +26,27 @@ import junit.framework.TestCase;
  * @author Joel Leitch
  */
 public class LowerCaseNamingPolicyTest extends TestCase {
-  private static final String ALL_LOWER = "abcdefg";
-  private static final String ALL_UPPER = "ABCDEFG";
-  private static final String MIXED = "aBcdeFg";
+	private static final String ALL_LOWER = "abcdefg";
+	private static final String ALL_UPPER = "ABCDEFG";
+	private static final String MIXED = "aBcdeFg";
 
-  private LowerCaseNamingPolicy namingPolicy;
+	private LowerCaseNamingPolicy namingPolicy;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    namingPolicy = new LowerCaseNamingPolicy();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		namingPolicy = new LowerCaseNamingPolicy();
+	}
 
-  public void testAllLowerCase() throws Exception {
-    assertEquals(ALL_LOWER, namingPolicy.translateName(ALL_LOWER, String.class, null));
-  }
+	public void testAllLowerCase() throws Exception {
+		assertEquals(ALL_LOWER, namingPolicy.translateName(ALL_LOWER, String.class, null));
+	}
 
-  public void testAllUpperCase() throws Exception {
-    assertEquals(ALL_LOWER, namingPolicy.translateName(ALL_UPPER, String.class, null));
-  }
+	public void testAllUpperCase() throws Exception {
+		assertEquals(ALL_LOWER, namingPolicy.translateName(ALL_UPPER, String.class, null));
+	}
 
-  public void testMixedCase() throws Exception {
-    assertEquals(ALL_LOWER, namingPolicy.translateName(MIXED, String.class, null));
-  }
+	public void testMixedCase() throws Exception {
+		assertEquals(ALL_LOWER, namingPolicy.translateName(MIXED, String.class, null));
+	}
 }

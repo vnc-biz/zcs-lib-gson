@@ -32,26 +32,26 @@ import java.util.List;
  * @author Joel Leitch
  */
 public class GenericArrayTypeTest extends TestCase {
-  private GenericArrayType ourType;
+	private GenericArrayType ourType;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    ourType = $Gson$Types.arrayOf($Gson$Types.newParameterizedTypeWithOwner(null, List.class, String.class));
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		ourType = $Gson$Types.arrayOf($Gson$Types.newParameterizedTypeWithOwner(null, List.class, String.class));
+	}
 
-  public void testOurTypeFunctionality() throws Exception {
-    Type parameterizedType = new TypeToken<List<String>>() {}.getType();
-    Type genericArrayType = new TypeToken<List<String>[]>() {}.getType();
+	public void testOurTypeFunctionality() throws Exception {
+		Type parameterizedType = new TypeToken<List<String>>() {} .getType();
+		Type genericArrayType = new TypeToken<List<String>[]>() {} .getType();
 
-    assertEquals(parameterizedType, ourType.getGenericComponentType());
-    assertEquals(genericArrayType, ourType);
-    assertEquals(genericArrayType.hashCode(), ourType.hashCode());
-  }
+		assertEquals(parameterizedType, ourType.getGenericComponentType());
+		assertEquals(genericArrayType, ourType);
+		assertEquals(genericArrayType.hashCode(), ourType.hashCode());
+	}
 
-  public void testNotEquals() throws Exception {
-    Type differentGenericArrayType = new TypeToken<List<String>[][]>() {}.getType();
-    assertFalse(differentGenericArrayType.equals(ourType));
-    assertFalse(ourType.equals(differentGenericArrayType));
-  }
+	public void testNotEquals() throws Exception {
+		Type differentGenericArrayType = new TypeToken<List<String>[][]>() {} .getType();
+		assertFalse(differentGenericArrayType.equals(ourType));
+		assertFalse(ourType.equals(differentGenericArrayType));
+	}
 }

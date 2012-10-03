@@ -36,96 +36,96 @@ import com.google.gson.common.TestTypes.ClassOverridingEquals;
  * @author Joel Leitch
  */
 public class CircularReferenceTest extends TestCase {
-  private Gson gson;
+	private Gson gson;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new Gson();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new Gson();
+	}
 
-  public void testCircularSerialization() throws Exception {
-    ContainsReferenceToSelfType a = new ContainsReferenceToSelfType();
-    ContainsReferenceToSelfType b = new ContainsReferenceToSelfType();
-    a.children.add(b);
-    b.children.add(a);
-    try {
-      gson.toJson(a);
-      fail("Circular types should not get printed!");
-    } catch (IllegalStateException expected) { 
-      assertTrue(expected.getMessage().contains("children"));      
-    }
-  }
+	public void testCircularSerialization() throws Exception {
+		ContainsReferenceToSelfType a = new ContainsReferenceToSelfType();
+		ContainsReferenceToSelfType b = new ContainsReferenceToSelfType();
+		a.children.add(b);
+		b.children.add(a);
+		try {
+			gson.toJson(a);
+			fail("Circular types should not get printed!");
+		} catch (IllegalStateException expected) {
+			assertTrue(expected.getMessage().contains("children"));
+		}
+	}
 
-  public void testSelfReferenceSerialization() throws Exception {
-    ClassOverridingEquals objA = new ClassOverridingEquals();
-    objA.ref = objA;
+	public void testSelfReferenceSerialization() throws Exception {
+		ClassOverridingEquals objA = new ClassOverridingEquals();
+		objA.ref = objA;
 
-    try {
-      gson.toJson(objA);
-      fail("Circular reference to self can not be serialized!");
-    } catch (IllegalStateException expected) { }
-  }
+		try {
+			gson.toJson(objA);
+			fail("Circular reference to self can not be serialized!");
+		} catch (IllegalStateException expected) { }
+	}
 
-  public void testSelfReferenceArrayFieldSerialization() throws Exception {
-    ClassWithSelfReferenceArray objA = new ClassWithSelfReferenceArray();
-    objA.children = new ClassWithSelfReferenceArray[]{objA};
+	public void testSelfReferenceArrayFieldSerialization() throws Exception {
+		ClassWithSelfReferenceArray objA = new ClassWithSelfReferenceArray();
+		objA.children = new ClassWithSelfReferenceArray[] {objA};
 
-    try {
-      gson.toJson(objA);
-      fail("Circular reference to self can not be serialized!");
-    } catch (IllegalStateException expected) { 
-      assertTrue(expected.getMessage().contains("children"));
-    }
-  }
+		try {
+			gson.toJson(objA);
+			fail("Circular reference to self can not be serialized!");
+		} catch (IllegalStateException expected) {
+			assertTrue(expected.getMessage().contains("children"));
+		}
+	}
 
-  public void testSelfReferenceCustomHandlerSerialization() throws Exception {
-    ClassWithSelfReference obj = new ClassWithSelfReference();
-    obj.child = obj;
-    Gson gson = new GsonBuilder().registerTypeAdapter(ClassWithSelfReference.class, new JsonSerializer<ClassWithSelfReference>() {
-      public JsonElement serialize(ClassWithSelfReference src, Type typeOfSrc,
-          JsonSerializationContext context) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("property", "value");
-        obj.add("child", context.serialize(src.child));
-        return obj;
-      }      
-    }).create();
-    try {
-      gson.toJson(obj);
-      fail("Circular reference to self can not be serialized!");
-    } catch (IllegalStateException expected) { 
-      assertTrue(expected.getMessage().contains("Offending"));
-    }
-  }
+	public void testSelfReferenceCustomHandlerSerialization() throws Exception {
+		ClassWithSelfReference obj = new ClassWithSelfReference();
+		obj.child = obj;
+		Gson gson = new GsonBuilder().registerTypeAdapter(ClassWithSelfReference.class, new JsonSerializer<ClassWithSelfReference>() {
+			public JsonElement serialize(ClassWithSelfReference src, Type typeOfSrc,
+			JsonSerializationContext context) {
+				JsonObject obj = new JsonObject();
+				obj.addProperty("property", "value");
+				obj.add("child", context.serialize(src.child));
+				return obj;
+			}
+		}).create();
+		try {
+			gson.toJson(obj);
+			fail("Circular reference to self can not be serialized!");
+		} catch (IllegalStateException expected) {
+			assertTrue(expected.getMessage().contains("Offending"));
+		}
+	}
 
-  public void testDirectedAcyclicGraphSerialization() throws Exception {
-    ContainsReferenceToSelfType a = new ContainsReferenceToSelfType();
-    ContainsReferenceToSelfType b = new ContainsReferenceToSelfType();
-    ContainsReferenceToSelfType c = new ContainsReferenceToSelfType();
-    a.children.add(b);
-    a.children.add(c);
-    b.children.add(c);
-    assertNotNull(gson.toJson(a));
-  }
+	public void testDirectedAcyclicGraphSerialization() throws Exception {
+		ContainsReferenceToSelfType a = new ContainsReferenceToSelfType();
+		ContainsReferenceToSelfType b = new ContainsReferenceToSelfType();
+		ContainsReferenceToSelfType c = new ContainsReferenceToSelfType();
+		a.children.add(b);
+		a.children.add(c);
+		b.children.add(c);
+		assertNotNull(gson.toJson(a));
+	}
 
-  public void testDirectedAcyclicGraphDeserialization() throws Exception {
-    String json = "{\"children\":[{\"children\":[{\"children\":[]}]},{\"children\":[]}]}";
-    ContainsReferenceToSelfType target = gson.fromJson(json, ContainsReferenceToSelfType.class);
-    assertNotNull(target);
-    assertEquals(2, target.children.size());
-  }
+	public void testDirectedAcyclicGraphDeserialization() throws Exception {
+		String json = "{\"children\":[{\"children\":[{\"children\":[]}]},{\"children\":[]}]}";
+		ContainsReferenceToSelfType target = gson.fromJson(json, ContainsReferenceToSelfType.class);
+		assertNotNull(target);
+		assertEquals(2, target.children.size());
+	}
 
-  private static class ContainsReferenceToSelfType {
-    Collection<ContainsReferenceToSelfType> children = new ArrayList<ContainsReferenceToSelfType>();
-  }
-  
-  private static class ClassWithSelfReference {
-    ClassWithSelfReference child;
-  }
+	private static class ContainsReferenceToSelfType {
+		Collection<ContainsReferenceToSelfType> children = new ArrayList<ContainsReferenceToSelfType>();
+	}
 
-  private static class ClassWithSelfReferenceArray {
-    @SuppressWarnings("unused")
-    ClassWithSelfReferenceArray[] children;
-  }
+	private static class ClassWithSelfReference {
+		ClassWithSelfReference child;
+	}
+
+	private static class ClassWithSelfReferenceArray {
+		@SuppressWarnings("unused")
+		ClassWithSelfReferenceArray[] children;
+	}
 }

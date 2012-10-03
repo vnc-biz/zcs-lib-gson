@@ -35,48 +35,48 @@ import java.lang.reflect.Type;
  */
 public class InstanceCreatorTest extends TestCase {
 
-  public void testInstanceCreatorReturnsBaseType() {
-    Gson gson = new GsonBuilder()
-      .registerTypeAdapter(Base.class, new InstanceCreator<Base>() {
-       public Base createInstance(Type type) {
-         return new Base();
-       }
-      })
-      .create();
-    String json = "{baseName:'BaseRevised',subName:'Sub'}";
-    Base base = gson.fromJson(json, Base.class);
-    assertEquals("BaseRevised", base.baseName);
-  }
+	public void testInstanceCreatorReturnsBaseType() {
+		Gson gson = new GsonBuilder()
+		.registerTypeAdapter(Base.class, new InstanceCreator<Base>() {
+			public Base createInstance(Type type) {
+				return new Base();
+			}
+		})
+		.create();
+		String json = "{baseName:'BaseRevised',subName:'Sub'}";
+		Base base = gson.fromJson(json, Base.class);
+		assertEquals("BaseRevised", base.baseName);
+	}
 
-  public void testInstanceCreatorReturnsSubTypeForTopLevelObject() {
-    Gson gson = new GsonBuilder()
-    .registerTypeAdapter(Base.class, new InstanceCreator<Base>() {
-      public Base createInstance(Type type) {
-        return new Sub();
-      }
-    })
-    .create();
+	public void testInstanceCreatorReturnsSubTypeForTopLevelObject() {
+		Gson gson = new GsonBuilder()
+		.registerTypeAdapter(Base.class, new InstanceCreator<Base>() {
+			public Base createInstance(Type type) {
+				return new Sub();
+			}
+		})
+		.create();
 
-    String json = "{baseName:'Base',subName:'SubRevised'}";
-    Base base = gson.fromJson(json, Base.class);
-    assertTrue(base instanceof Sub);
+		String json = "{baseName:'Base',subName:'SubRevised'}";
+		Base base = gson.fromJson(json, Base.class);
+		assertTrue(base instanceof Sub);
 
-    Sub sub = (Sub) base;
-    assertFalse("SubRevised".equals(sub.subName));
-    assertEquals(Sub.SUB_NAME, sub.subName);
-  }
+		Sub sub = (Sub) base;
+		assertFalse("SubRevised".equals(sub.subName));
+		assertEquals(Sub.SUB_NAME, sub.subName);
+	}
 
-  public void testInstanceCreatorReturnsSubTypeForField() {
-    Gson gson = new GsonBuilder()
-    .registerTypeAdapter(Base.class, new InstanceCreator<Base>() {
-      public Base createInstance(Type type) {
-        return new Sub();
-      }
-    })
-    .create();
-    String json = "{base:{baseName:'Base',subName:'SubRevised'}}";
-    ClassWithBaseField target = gson.fromJson(json, ClassWithBaseField.class);
-    assertTrue(target.base instanceof Sub);
-    assertEquals("SubRevised", ((Sub)target.base).subName);
-  }
+	public void testInstanceCreatorReturnsSubTypeForField() {
+		Gson gson = new GsonBuilder()
+		.registerTypeAdapter(Base.class, new InstanceCreator<Base>() {
+			public Base createInstance(Type type) {
+				return new Sub();
+			}
+		})
+		.create();
+		String json = "{base:{baseName:'Base',subName:'SubRevised'}}";
+		ClassWithBaseField target = gson.fromJson(json, ClassWithBaseField.class);
+		assertTrue(target.base instanceof Sub);
+		assertEquals("SubRevised", ((Sub)target.base).subName);
+	}
 }

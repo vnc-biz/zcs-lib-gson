@@ -30,79 +30,79 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Joel Leitch
  */
 public class GsonTypeAdapterTest extends TestCase {
-  private Gson gson;
+	private Gson gson;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new GsonBuilder()
-        .registerTypeAdapter(AtomicLong.class, new ExceptionTypeAdapter())
-        .registerTypeAdapter(AtomicInteger.class, new AtomicIntegerTypeAdapter())
-        .create();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new GsonBuilder()
+		.registerTypeAdapter(AtomicLong.class, new ExceptionTypeAdapter())
+		.registerTypeAdapter(AtomicInteger.class, new AtomicIntegerTypeAdapter())
+		.create();
+	}
 
-  public void testDefaultTypeAdapterThrowsParseException() throws Exception {
-    try {
-      gson.fromJson("{\"abc\":123}", BigInteger.class);
-      fail("Should have thrown a JsonParseException");
-    } catch (JsonParseException expected) { }
-  }
+	public void testDefaultTypeAdapterThrowsParseException() throws Exception {
+		try {
+			gson.fromJson("{\"abc\":123}", BigInteger.class);
+			fail("Should have thrown a JsonParseException");
+		} catch (JsonParseException expected) { }
+	}
 
-  public void testTypeAdapterThrowsException() throws Exception {
-    try {
-      gson.toJson(new AtomicLong(0));
-      fail("Type Adapter should have thrown an exception");
-    } catch (IllegalStateException expected) { }
+	public void testTypeAdapterThrowsException() throws Exception {
+		try {
+			gson.toJson(new AtomicLong(0));
+			fail("Type Adapter should have thrown an exception");
+		} catch (IllegalStateException expected) { }
 
-    try {
-      gson.fromJson("123", AtomicLong.class);
-      fail("Type Adapter should have thrown an exception");
-    } catch (JsonParseException expected) { }
-  }
+		try {
+			gson.fromJson("123", AtomicLong.class);
+			fail("Type Adapter should have thrown an exception");
+		} catch (JsonParseException expected) { }
+	}
 
-  public void testTypeAdapterProperlyConvertsTypes() throws Exception {
-    int intialValue = 1;
-    AtomicInteger atomicInt = new AtomicInteger(intialValue);
-    String json = gson.toJson(atomicInt);
-    assertEquals(intialValue + 1, Integer.parseInt(json));
+	public void testTypeAdapterProperlyConvertsTypes() throws Exception {
+		int intialValue = 1;
+		AtomicInteger atomicInt = new AtomicInteger(intialValue);
+		String json = gson.toJson(atomicInt);
+		assertEquals(intialValue + 1, Integer.parseInt(json));
 
-    atomicInt = gson.fromJson(json, AtomicInteger.class);
-    assertEquals(intialValue, atomicInt.get());
-  }
+		atomicInt = gson.fromJson(json, AtomicInteger.class);
+		assertEquals(intialValue, atomicInt.get());
+	}
 
-  public void testTypeAdapterDoesNotAffectNonAdaptedTypes() throws Exception {
-    String expected = "blah";
-    String actual = gson.toJson(expected);
-    assertEquals("\"" + expected + "\"", actual);
+	public void testTypeAdapterDoesNotAffectNonAdaptedTypes() throws Exception {
+		String expected = "blah";
+		String actual = gson.toJson(expected);
+		assertEquals("\"" + expected + "\"", actual);
 
-    actual = gson.fromJson(actual, String.class);
-    assertEquals(expected, actual);
-  }
+		actual = gson.fromJson(actual, String.class);
+		assertEquals(expected, actual);
+	}
 
-  private static class ExceptionTypeAdapter
-      implements JsonSerializer<AtomicLong>, JsonDeserializer<AtomicLong> {
-    public JsonElement serialize(
-        AtomicLong src, Type typeOfSrc, JsonSerializationContext context) {
-      throw new IllegalStateException();
-    }
+	private static class ExceptionTypeAdapter
+		implements JsonSerializer<AtomicLong>, JsonDeserializer<AtomicLong> {
+		public JsonElement serialize(
+		    AtomicLong src, Type typeOfSrc, JsonSerializationContext context) {
+			throw new IllegalStateException();
+		}
 
-    public AtomicLong deserialize(
-        JsonElement json, Type typeOfT, JsonDeserializationContext context)
-        throws JsonParseException {
-      throw new IllegalStateException();
-    }
-  }
+		public AtomicLong deserialize(
+		    JsonElement json, Type typeOfT, JsonDeserializationContext context)
+		throws JsonParseException {
+			throw new IllegalStateException();
+		}
+	}
 
-  private static class AtomicIntegerTypeAdapter
-      implements JsonSerializer<AtomicInteger>, JsonDeserializer<AtomicInteger> {
-    public JsonElement serialize(AtomicInteger src, Type typeOfSrc, JsonSerializationContext context) {
-      return new JsonPrimitive(src.incrementAndGet());
-    }
+	private static class AtomicIntegerTypeAdapter
+		implements JsonSerializer<AtomicInteger>, JsonDeserializer<AtomicInteger> {
+		public JsonElement serialize(AtomicInteger src, Type typeOfSrc, JsonSerializationContext context) {
+			return new JsonPrimitive(src.incrementAndGet());
+		}
 
-    public AtomicInteger deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-        throws JsonParseException {
-      int intValue = json.getAsInt();
-      return new AtomicInteger(--intValue);
-    }
-  }
+		public AtomicInteger deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+		throws JsonParseException {
+			int intValue = json.getAsInt();
+			return new AtomicInteger(--intValue);
+		}
+	}
 }

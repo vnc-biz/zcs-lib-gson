@@ -24,29 +24,29 @@ import junit.framework.TestCase;
  */
 public final class JsonArrayTest extends TestCase {
 
-  public void testEqualsOnEmptyArray() {
-    MoreAsserts.assertEqualsAndHashCode(new JsonArray(), new JsonArray());
-  }
+	public void testEqualsOnEmptyArray() {
+		MoreAsserts.assertEqualsAndHashCode(new JsonArray(), new JsonArray());
+	}
 
-  public void testEqualsNonEmptyArray() {
-    JsonArray a = new JsonArray();
-    JsonArray b = new JsonArray();
+	public void testEqualsNonEmptyArray() {
+		JsonArray a = new JsonArray();
+		JsonArray b = new JsonArray();
 
-    assertEquals(a, a);
+		assertEquals(a, a);
 
-    a.add(new JsonObject());
-    assertFalse(a.equals(b));
-    assertFalse(b.equals(a));
+		a.add(new JsonObject());
+		assertFalse(a.equals(b));
+		assertFalse(b.equals(a));
 
-    b.add(new JsonObject());
-    MoreAsserts.assertEqualsAndHashCode(a, b);
+		b.add(new JsonObject());
+		MoreAsserts.assertEqualsAndHashCode(a, b);
 
-    a.add(new JsonObject());
-    assertFalse(a.equals(b));
-    assertFalse(b.equals(a));
+		a.add(new JsonObject());
+		assertFalse(a.equals(b));
+		assertFalse(b.equals(a));
 
-    b.add(new JsonNull());
-    assertFalse(a.equals(b));
-    assertFalse(b.equals(a));
-  }
+		b.add(new JsonNull());
+		assertFalse(a.equals(b));
+		assertFalse(b.equals(a));
+	}
 }

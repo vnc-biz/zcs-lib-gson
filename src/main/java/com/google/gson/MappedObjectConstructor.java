@@ -32,46 +32,46 @@ import java.lang.reflect.Type;
  * @author Joel Leitch
  */
 final class MappedObjectConstructor implements ObjectConstructor {
-  private static final UnsafeAllocator unsafeAllocator = UnsafeAllocator.create();
-  private static final DefaultConstructorAllocator defaultConstructorAllocator =
-      new DefaultConstructorAllocator(500);
+	private static final UnsafeAllocator unsafeAllocator = UnsafeAllocator.create();
+	private static final DefaultConstructorAllocator defaultConstructorAllocator =
+	    new DefaultConstructorAllocator(500);
 
-  private final ParameterizedTypeHandlerMap<InstanceCreator<?>> instanceCreatorMap;
+	private final ParameterizedTypeHandlerMap<InstanceCreator<?>> instanceCreatorMap;
 
-  public MappedObjectConstructor(
-      ParameterizedTypeHandlerMap<InstanceCreator<?>> instanceCreators) {
-    instanceCreatorMap = instanceCreators;
-  }
+	public MappedObjectConstructor(
+	    ParameterizedTypeHandlerMap<InstanceCreator<?>> instanceCreators) {
+		instanceCreatorMap = instanceCreators;
+	}
 
-  @SuppressWarnings("unchecked")
-  public <T> T construct(Type typeOfT) {
-    InstanceCreator<T> creator = (InstanceCreator<T>) instanceCreatorMap.getHandlerFor(typeOfT);
-    if (creator != null) {
-      return creator.createInstance(typeOfT);
-    }
-    return (T) constructWithAllocators(typeOfT);
-  }
+	@SuppressWarnings("unchecked")
+	public <T> T construct(Type typeOfT) {
+		InstanceCreator<T> creator = (InstanceCreator<T>) instanceCreatorMap.getHandlerFor(typeOfT);
+		if (creator != null) {
+			return creator.createInstance(typeOfT);
+		}
+		return (T) constructWithAllocators(typeOfT);
+	}
 
-  public Object constructArray(Type type, int length) {
-    return Array.newInstance($Gson$Types.getRawType(type), length);
-  }
+	public Object constructArray(Type type, int length) {
+		return Array.newInstance($Gson$Types.getRawType(type), length);
+	}
 
-  @SuppressWarnings({"unchecked", "cast"})
-  private <T> T constructWithAllocators(Type typeOfT) {
-    try {
-      Class<T> clazz = (Class<T>) $Gson$Types.getRawType(typeOfT);
-      T obj = defaultConstructorAllocator.newInstance(clazz);
-      return (obj == null)
-          ? unsafeAllocator.newInstance(clazz)
-          : obj;
-    } catch (Exception e) {
-      throw new RuntimeException(("Unable to invoke no-args constructor for " + typeOfT + ". "
-          + "Register an InstanceCreator with Gson for this type may fix this problem."), e);
-    }
-  }
+	@SuppressWarnings( {"unchecked", "cast"})
+	private <T> T constructWithAllocators(Type typeOfT) {
+		try {
+			Class<T> clazz = (Class<T>) $Gson$Types.getRawType(typeOfT);
+			T obj = defaultConstructorAllocator.newInstance(clazz);
+			return (obj == null)
+			       ? unsafeAllocator.newInstance(clazz)
+			       : obj;
+		} catch (Exception e) {
+			throw new RuntimeException(("Unable to invoke no-args constructor for " + typeOfT + ". "
+			                            + "Register an InstanceCreator with Gson for this type may fix this problem."), e);
+		}
+	}
 
-  @Override
-  public String toString() {
-    return instanceCreatorMap.toString();
-  }
+	@Override
+	public String toString() {
+		return instanceCreatorMap.toString();
+	}
 }

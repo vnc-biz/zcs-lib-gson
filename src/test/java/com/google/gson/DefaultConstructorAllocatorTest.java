@@ -27,34 +27,34 @@ import java.util.LinkedList;
  * @author Joel Leitch
  */
 public class DefaultConstructorAllocatorTest extends TestCase {
-  private DefaultConstructorAllocator allocator;
+	private DefaultConstructorAllocator allocator;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    allocator = new DefaultConstructorAllocator();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		allocator = new DefaultConstructorAllocator();
+	}
 
-  @SuppressWarnings("unchecked")
-  public void testObjectConstructor() throws Exception {
-    ArrayList<Object> arrayList = allocator.newInstance(ArrayList.class);
-    assertTrue(arrayList.isEmpty());
-    assertTrue(allocator.isInCache(ArrayList.class));
+	@SuppressWarnings("unchecked")
+	public void testObjectConstructor() throws Exception {
+		ArrayList<Object> arrayList = allocator.newInstance(ArrayList.class);
+		assertTrue(arrayList.isEmpty());
+		assertTrue(allocator.isInCache(ArrayList.class));
 
-    LinkedList<Object> linkedList = allocator.newInstance(LinkedList.class);
-    assertTrue(linkedList.isEmpty());
-    assertTrue(allocator.isInCache(LinkedList.class));
-  }
+		LinkedList<Object> linkedList = allocator.newInstance(LinkedList.class);
+		assertTrue(linkedList.isEmpty());
+		assertTrue(allocator.isInCache(LinkedList.class));
+	}
 
-  public void testMissingDefaultConstructor() throws Exception {
-    assertNull(allocator.newInstance(NoDefaultConstructor.class));
-    assertTrue(allocator.isInCache(NoDefaultConstructor.class));
-  }
+	public void testMissingDefaultConstructor() throws Exception {
+		assertNull(allocator.newInstance(NoDefaultConstructor.class));
+		assertTrue(allocator.isInCache(NoDefaultConstructor.class));
+	}
 
-  private static class NoDefaultConstructor {
-    @SuppressWarnings("unused")
-    public NoDefaultConstructor(int i) {
-      // do nothing
-    }
-  }
+	private static class NoDefaultConstructor {
+		@SuppressWarnings("unused")
+		public NoDefaultConstructor(int i) {
+			// do nothing
+		}
+	}
 }

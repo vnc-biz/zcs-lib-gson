@@ -25,45 +25,45 @@ import junit.framework.TestCase;
  */
 public class CamelCaseSeparatorNamingPolicyTest extends TestCase {
 
-  private static final Class<String> CLASS = String.class;
-  private static final String UNDERSCORE = "_";
-  private static final String MULTI_CHAR_SEPARATOR = "_$_";
+	private static final Class<String> CLASS = String.class;
+	private static final String UNDERSCORE = "_";
+	private static final String MULTI_CHAR_SEPARATOR = "_$_";
 
-  public void testInvalidInstantiation() throws Exception {
-    try {
-      new CamelCaseSeparatorNamingPolicy(null);
-      fail("Null separator string is not supported");
-    } catch (NullPointerException expected) { }
+	public void testInvalidInstantiation() throws Exception {
+		try {
+			new CamelCaseSeparatorNamingPolicy(null);
+			fail("Null separator string is not supported");
+		} catch (NullPointerException expected) { }
 
-    try {
-      new CamelCaseSeparatorNamingPolicy("");
-      fail("Empty separator string is not supported");
-    } catch (IllegalArgumentException expected) { }
-  }
+		try {
+			new CamelCaseSeparatorNamingPolicy("");
+			fail("Empty separator string is not supported");
+		} catch (IllegalArgumentException expected) { }
+	}
 
-  public void testUnderscoreSeparator() throws Exception {
-    CamelCaseSeparatorNamingPolicy namingPolicy =
-        new CamelCaseSeparatorNamingPolicy(UNDERSCORE);
-    String translatedName = namingPolicy.translateName("testUnderscoreBetweenWords", CLASS, null);
-    assertEquals("test_Underscore_Between_Words", translatedName);
-  }
+	public void testUnderscoreSeparator() throws Exception {
+		CamelCaseSeparatorNamingPolicy namingPolicy =
+		    new CamelCaseSeparatorNamingPolicy(UNDERSCORE);
+		String translatedName = namingPolicy.translateName("testUnderscoreBetweenWords", CLASS, null);
+		assertEquals("test_Underscore_Between_Words", translatedName);
+	}
 
-  public void testMultiCharSeparator() throws Exception {
-    CamelCaseSeparatorNamingPolicy namingPolicy =
-        new CamelCaseSeparatorNamingPolicy(MULTI_CHAR_SEPARATOR);
-    String translatedName = namingPolicy.translateName("testMultCharBetweenWords", CLASS, null);
-    assertEquals("test_$_Mult_$_Char_$_Between_$_Words", translatedName);
-  }
+	public void testMultiCharSeparator() throws Exception {
+		CamelCaseSeparatorNamingPolicy namingPolicy =
+		    new CamelCaseSeparatorNamingPolicy(MULTI_CHAR_SEPARATOR);
+		String translatedName = namingPolicy.translateName("testMultCharBetweenWords", CLASS, null);
+		assertEquals("test_$_Mult_$_Char_$_Between_$_Words", translatedName);
+	}
 
-  public void testNameBeginsWithCapital() throws Exception {
-    CamelCaseSeparatorNamingPolicy namingPolicy = new CamelCaseSeparatorNamingPolicy(UNDERSCORE);
-    String translatedName = namingPolicy.translateName("TestNameBeginsWithCapital", CLASS, null);
-    assertEquals("Test_Name_Begins_With_Capital", translatedName);
-  }
+	public void testNameBeginsWithCapital() throws Exception {
+		CamelCaseSeparatorNamingPolicy namingPolicy = new CamelCaseSeparatorNamingPolicy(UNDERSCORE);
+		String translatedName = namingPolicy.translateName("TestNameBeginsWithCapital", CLASS, null);
+		assertEquals("Test_Name_Begins_With_Capital", translatedName);
+	}
 
-  public void testExceptionPossiblyIncorrectSeparation() throws Exception {
-    CamelCaseSeparatorNamingPolicy namingPolicy = new CamelCaseSeparatorNamingPolicy(UNDERSCORE);
-    String translatedName = namingPolicy.translateName("aURL", CLASS, null);
-    assertEquals("a_U_R_L", translatedName);
-  }
+	public void testExceptionPossiblyIncorrectSeparation() throws Exception {
+		CamelCaseSeparatorNamingPolicy namingPolicy = new CamelCaseSeparatorNamingPolicy(UNDERSCORE);
+		String translatedName = namingPolicy.translateName("aURL", CLASS, null);
+		assertEquals("a_U_R_L", translatedName);
+	}
 }

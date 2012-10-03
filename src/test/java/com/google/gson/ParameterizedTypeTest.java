@@ -32,26 +32,26 @@ import java.util.List;
  * @author Joel Leitch
  */
 public class ParameterizedTypeTest extends TestCase {
-  private ParameterizedType ourType;
+	private ParameterizedType ourType;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    ourType = $Gson$Types.newParameterizedTypeWithOwner(null, List.class, String.class);
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		ourType = $Gson$Types.newParameterizedTypeWithOwner(null, List.class, String.class);
+	}
 
-  public void testOurTypeFunctionality() throws Exception {
-    Type parameterizedType = new TypeToken<List<String>>() {}.getType();
-    assertNull(ourType.getOwnerType());
-    assertEquals(String.class, ourType.getActualTypeArguments()[0]);
-    assertEquals(List.class, ourType.getRawType());
-    assertEquals(parameterizedType, ourType);
-    assertEquals(parameterizedType.hashCode(), ourType.hashCode());
-  }
+	public void testOurTypeFunctionality() throws Exception {
+		Type parameterizedType = new TypeToken<List<String>>() {} .getType();
+		assertNull(ourType.getOwnerType());
+		assertEquals(String.class, ourType.getActualTypeArguments()[0]);
+		assertEquals(List.class, ourType.getRawType());
+		assertEquals(parameterizedType, ourType);
+		assertEquals(parameterizedType.hashCode(), ourType.hashCode());
+	}
 
-  public void testNotEquals() throws Exception {
-    Type differentParameterizedType = new TypeToken<List<Integer>>() {}.getType();
-    assertFalse(differentParameterizedType.equals(ourType));
-    assertFalse(ourType.equals(differentParameterizedType));
-  }
+	public void testNotEquals() throws Exception {
+		Type differentParameterizedType = new TypeToken<List<Integer>>() {} .getType();
+		assertFalse(differentParameterizedType.equals(ourType));
+		assertFalse(ourType.equals(differentParameterizedType));
+	}
 }

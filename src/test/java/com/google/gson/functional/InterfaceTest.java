@@ -27,46 +27,46 @@ import junit.framework.TestCase;
  * @author Joel Leitch
  */
 public class InterfaceTest extends TestCase {
-  private static final String OBJ_JSON = "{\"someStringValue\":\"StringValue\"}";
+	private static final String OBJ_JSON = "{\"someStringValue\":\"StringValue\"}";
 
-  private Gson gson;
-  private TestObject obj;
+	private Gson gson;
+	private TestObject obj;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new Gson();
-    obj = new TestObject("StringValue");
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new Gson();
+		obj = new TestObject("StringValue");
+	}
 
-  public void testSerializingObjectImplementingInterface() throws Exception {
-    assertEquals(OBJ_JSON, gson.toJson(obj));
-  }
-  
-  public void testSerializingInterfaceObjectField() throws Exception {
-    TestObjectWrapper objWrapper = new TestObjectWrapper(obj);
-    assertEquals("{\"obj\":" + OBJ_JSON + "}", gson.toJson(objWrapper));
-  }
+	public void testSerializingObjectImplementingInterface() throws Exception {
+		assertEquals(OBJ_JSON, gson.toJson(obj));
+	}
 
-  private static interface TestObjectInterface {
-    // Holder
-  }
-  
-  private static class TestObject implements TestObjectInterface {
-    @SuppressWarnings("unused")
-    private String someStringValue;
-    
-    private TestObject(String value) {
-      this.someStringValue = value;
-    }
-  }
+	public void testSerializingInterfaceObjectField() throws Exception {
+		TestObjectWrapper objWrapper = new TestObjectWrapper(obj);
+		assertEquals("{\"obj\":" + OBJ_JSON + "}", gson.toJson(objWrapper));
+	}
 
-  private static class TestObjectWrapper {
-    @SuppressWarnings("unused")
-    private TestObjectInterface obj;
-    
-    private TestObjectWrapper(TestObjectInterface obj) {
-      this.obj = obj;
-    }
-  }
+	private static interface TestObjectInterface {
+		// Holder
+	}
+
+	private static class TestObject implements TestObjectInterface {
+		@SuppressWarnings("unused")
+		private String someStringValue;
+
+		private TestObject(String value) {
+			this.someStringValue = value;
+		}
+	}
+
+	private static class TestObjectWrapper {
+		@SuppressWarnings("unused")
+		private TestObjectInterface obj;
+
+		private TestObjectWrapper(TestObjectInterface obj) {
+			this.obj = obj;
+		}
+	}
 }

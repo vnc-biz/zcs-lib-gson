@@ -31,99 +31,99 @@ import java.util.List;
  * @author Joel Leitch
  */
 public class ParameterizedTypeHandlerMapTest extends TestCase {
-  private ParameterizedTypeHandlerMap<String> paramMap;
+	private ParameterizedTypeHandlerMap<String> paramMap;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    paramMap = new ParameterizedTypeHandlerMap<String>();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		paramMap = new ParameterizedTypeHandlerMap<String>();
+	}
 
-  public void testNullMap() throws Exception {
-    assertFalse(paramMap.hasSpecificHandlerFor(String.class));
-    assertNull(paramMap.getHandlerFor(String.class));
-    assertNull(paramMap.getHandlerFor(String.class));
-  }
+	public void testNullMap() throws Exception {
+		assertFalse(paramMap.hasSpecificHandlerFor(String.class));
+		assertNull(paramMap.getHandlerFor(String.class));
+		assertNull(paramMap.getHandlerFor(String.class));
+	}
 
-  public void testHasGenericButNotSpecific() throws Exception {
-    Type specificType = new TypeToken<List<String>>() {}.getType();
-    String handler = "blah";
-    paramMap.register(List.class, handler);
+	public void testHasGenericButNotSpecific() throws Exception {
+		Type specificType = new TypeToken<List<String>>() {} .getType();
+		String handler = "blah";
+		paramMap.register(List.class, handler);
 
-    assertFalse(paramMap.hasSpecificHandlerFor(specificType));
-    assertTrue(paramMap.hasSpecificHandlerFor(List.class));
-    assertNotNull(paramMap.getHandlerFor(specificType));
-    assertNotNull(paramMap.getHandlerFor(List.class));
-    assertEquals(handler, paramMap.getHandlerFor(specificType));
-  }
+		assertFalse(paramMap.hasSpecificHandlerFor(specificType));
+		assertTrue(paramMap.hasSpecificHandlerFor(List.class));
+		assertNotNull(paramMap.getHandlerFor(specificType));
+		assertNotNull(paramMap.getHandlerFor(List.class));
+		assertEquals(handler, paramMap.getHandlerFor(specificType));
+	}
 
-  public void testHasSpecificType() throws Exception {
-    Type specificType = new TypeToken<List<String>>() {}.getType();
-    String handler = "blah";
-    paramMap.register(specificType, handler);
+	public void testHasSpecificType() throws Exception {
+		Type specificType = new TypeToken<List<String>>() {} .getType();
+		String handler = "blah";
+		paramMap.register(specificType, handler);
 
-    assertTrue(paramMap.hasSpecificHandlerFor(specificType));
-    assertFalse(paramMap.hasSpecificHandlerFor(List.class));
-    assertNotNull(paramMap.getHandlerFor(specificType));
-    assertNull(paramMap.getHandlerFor(List.class));
-    assertEquals(handler, paramMap.getHandlerFor(specificType));
-  }
+		assertTrue(paramMap.hasSpecificHandlerFor(specificType));
+		assertFalse(paramMap.hasSpecificHandlerFor(List.class));
+		assertNotNull(paramMap.getHandlerFor(specificType));
+		assertNull(paramMap.getHandlerFor(List.class));
+		assertEquals(handler, paramMap.getHandlerFor(specificType));
+	}
 
-  public void testTypeOverridding() throws Exception {
-    String handler1 = "blah1";
-    String handler2 = "blah2";
-    paramMap.register(String.class, handler1);
-    paramMap.register(String.class, handler2);
+	public void testTypeOverridding() throws Exception {
+		String handler1 = "blah1";
+		String handler2 = "blah2";
+		paramMap.register(String.class, handler1);
+		paramMap.register(String.class, handler2);
 
-    assertTrue(paramMap.hasSpecificHandlerFor(String.class));
-    assertEquals(handler2, paramMap.getHandlerFor(String.class));
-  }
+		assertTrue(paramMap.hasSpecificHandlerFor(String.class));
+		assertEquals(handler2, paramMap.getHandlerFor(String.class));
+	}
 
-  public void testMakeUnmodifiable() throws Exception {
-    paramMap.makeUnmodifiable();
-    try {
-     paramMap.register(String.class, "blah");
-     fail("Can not register handlers when map is unmodifiable");
-    } catch (IllegalStateException expected) { }
-  }
+	public void testMakeUnmodifiable() throws Exception {
+		paramMap.makeUnmodifiable();
+		try {
+			paramMap.register(String.class, "blah");
+			fail("Can not register handlers when map is unmodifiable");
+		} catch (IllegalStateException expected) { }
+	}
 
-  public void testTypeHierarchy() {
-    paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
-    String handler = paramMap.getHandlerFor(Sub.class);
-    assertEquals("baseHandler", handler);
-  }
+	public void testTypeHierarchy() {
+		paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
+		String handler = paramMap.getHandlerFor(Sub.class);
+		assertEquals("baseHandler", handler);
+	}
 
-  public void testTypeHierarchyMultipleHandlers() {
-    paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
-    paramMap.registerForTypeHierarchy(Sub.class, "subHandler");
-    String handler = paramMap.getHandlerFor(SubOfSub.class);
-    assertEquals("subHandler", handler);
-  }
+	public void testTypeHierarchyMultipleHandlers() {
+		paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
+		paramMap.registerForTypeHierarchy(Sub.class, "subHandler");
+		String handler = paramMap.getHandlerFor(SubOfSub.class);
+		assertEquals("subHandler", handler);
+	}
 
-  public void testTypeHierarchyRegisterIfAbsent() {
-    paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
-    ParameterizedTypeHandlerMap<String> otherMap = new ParameterizedTypeHandlerMap<String>();
-    otherMap.registerForTypeHierarchy(Base.class, "baseHandler2");
-    paramMap.registerIfAbsent(otherMap);
-    String handler = paramMap.getHandlerFor(Base.class);
-    assertEquals("baseHandler", handler);
-  }
+	public void testTypeHierarchyRegisterIfAbsent() {
+		paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
+		ParameterizedTypeHandlerMap<String> otherMap = new ParameterizedTypeHandlerMap<String>();
+		otherMap.registerForTypeHierarchy(Base.class, "baseHandler2");
+		paramMap.registerIfAbsent(otherMap);
+		String handler = paramMap.getHandlerFor(Base.class);
+		assertEquals("baseHandler", handler);
+	}
 
-  public void testReplaceExistingTypeHierarchyHandler() {
-    paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
-    paramMap.registerForTypeHierarchy(Base.class, "base2Handler");
-    String handler = paramMap.getHandlerFor(Base.class);
-    assertEquals("base2Handler", handler);
-  }
+	public void testReplaceExistingTypeHierarchyHandler() {
+		paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
+		paramMap.registerForTypeHierarchy(Base.class, "base2Handler");
+		String handler = paramMap.getHandlerFor(Base.class);
+		assertEquals("base2Handler", handler);
+	}
 
-  public void testHidingExistingTypeHierarchyHandlerIsDisallowed() {
-    paramMap.registerForTypeHierarchy(Sub.class, "subHandler");
-    try {
-      paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
-      fail("A handler that hides an existing type hierarchy handler is not allowed");
-    } catch (IllegalArgumentException expected) {
-    }
-  }
-  private static class SubOfSub extends Sub {
-  }
+	public void testHidingExistingTypeHierarchyHandlerIsDisallowed() {
+		paramMap.registerForTypeHierarchy(Sub.class, "subHandler");
+		try {
+			paramMap.registerForTypeHierarchy(Base.class, "baseHandler");
+			fail("A handler that hides an existing type hierarchy handler is not allowed");
+		} catch (IllegalArgumentException expected) {
+		}
+	}
+	private static class SubOfSub extends Sub {
+	}
 }

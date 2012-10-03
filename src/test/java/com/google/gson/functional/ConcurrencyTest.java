@@ -26,115 +26,115 @@ import com.google.gson.Gson;
 
 /**
  * Tests for ensuring Gson thread-safety.
- * 
+ *
  * @author Inderjeet Singh
  * @author Joel Leitch
  */
 public class ConcurrencyTest extends TestCase {
-  private Gson gson;
+	private Gson gson;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    gson = new Gson();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gson = new Gson();
+	}
 
-  /**
-   * Source-code based on
-   * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
-   */
-  public void testSingleThreadSerialization() { 
-    MyObject myObj = new MyObject(); 
-    for (int i = 0; i < 10; i++) { 
-      gson.toJson(myObj); 
-    } 
-  } 
+	/**
+	 * Source-code based on
+	 * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
+	 */
+	public void testSingleThreadSerialization() {
+		MyObject myObj = new MyObject();
+		for (int i = 0; i < 10; i++) {
+			gson.toJson(myObj);
+		}
+	}
 
-  /**
-   * Source-code based on
-   * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
-   */
-  public void testSingleThreadDeserialization() { 
-    for (int i = 0; i < 10; i++) { 
-      gson.fromJson("{'a':'hello','b':'world','i':1}", MyObject.class); 
-    } 
-  } 
+	/**
+	 * Source-code based on
+	 * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
+	 */
+	public void testSingleThreadDeserialization() {
+		for (int i = 0; i < 10; i++) {
+			gson.fromJson("{'a':'hello','b':'world','i':1}", MyObject.class);
+		}
+	}
 
-  /**
-   * Source-code based on
-   * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
-   */
-  public void testMultiThreadSerialization() throws InterruptedException {
-    final CountDownLatch startLatch = new CountDownLatch(1);
-    final CountDownLatch finishedLatch = new CountDownLatch(10);
-    final AtomicBoolean failed = new AtomicBoolean(false);
-    ExecutorService executor = Executors.newFixedThreadPool(10);
-    for (int taskCount = 0; taskCount < 10; taskCount++) {
-      executor.execute(new Runnable() {
-        public void run() {
-          MyObject myObj = new MyObject();
-          try {
-            startLatch.await();
-            for (int i = 0; i < 10; i++) {
-              gson.toJson(myObj);
-            }
-          } catch (Throwable t) {
-            failed.set(true);
-          } finally {
-            finishedLatch.countDown();
-          }
-        }
-      });
-    }
-    startLatch.countDown();
-    finishedLatch.await();
-    assertFalse(failed.get());
-  }
+	/**
+	 * Source-code based on
+	 * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
+	 */
+	public void testMultiThreadSerialization() throws InterruptedException {
+		final CountDownLatch startLatch = new CountDownLatch(1);
+		final CountDownLatch finishedLatch = new CountDownLatch(10);
+		final AtomicBoolean failed = new AtomicBoolean(false);
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		for (int taskCount = 0; taskCount < 10; taskCount++) {
+			executor.execute(new Runnable() {
+				public void run() {
+					MyObject myObj = new MyObject();
+					try {
+						startLatch.await();
+						for (int i = 0; i < 10; i++) {
+							gson.toJson(myObj);
+						}
+					} catch (Throwable t) {
+						failed.set(true);
+					} finally {
+						finishedLatch.countDown();
+					}
+				}
+			});
+		}
+		startLatch.countDown();
+		finishedLatch.await();
+		assertFalse(failed.get());
+	}
 
-  /**
-   * Source-code based on
-   * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
-   */
-  public void testMultiThreadDeserialization() throws InterruptedException {
-    final CountDownLatch startLatch = new CountDownLatch(1);
-    final CountDownLatch finishedLatch = new CountDownLatch(10);
-    final AtomicBoolean failed = new AtomicBoolean(false);
-    ExecutorService executor = Executors.newFixedThreadPool(10);
-    for (int taskCount = 0; taskCount < 10; taskCount++) {
-      executor.execute(new Runnable() {
-        public void run() {
-          try {
-            startLatch.await();
-            for (int i = 0; i < 10; i++) {
-              gson.fromJson("{'a':'hello','b':'world','i':1}", MyObject.class); 
-            }
-          } catch (Throwable t) {
-            failed.set(true);
-          } finally {
-            finishedLatch.countDown();
-          }
-        }
-      });
-    }
-    startLatch.countDown();
-    finishedLatch.await();
-    assertFalse(failed.get());
-  }
-  
-  @SuppressWarnings("unused")
-  private static class MyObject {
-    String a;
-    String b;
-    int i;
+	/**
+	 * Source-code based on
+	 * http://groups.google.com/group/google-gson/browse_thread/thread/563bb51ee2495081
+	 */
+	public void testMultiThreadDeserialization() throws InterruptedException {
+		final CountDownLatch startLatch = new CountDownLatch(1);
+		final CountDownLatch finishedLatch = new CountDownLatch(10);
+		final AtomicBoolean failed = new AtomicBoolean(false);
+		ExecutorService executor = Executors.newFixedThreadPool(10);
+		for (int taskCount = 0; taskCount < 10; taskCount++) {
+			executor.execute(new Runnable() {
+				public void run() {
+					try {
+						startLatch.await();
+						for (int i = 0; i < 10; i++) {
+							gson.fromJson("{'a':'hello','b':'world','i':1}", MyObject.class);
+						}
+					} catch (Throwable t) {
+						failed.set(true);
+					} finally {
+						finishedLatch.countDown();
+					}
+				}
+			});
+		}
+		startLatch.countDown();
+		finishedLatch.await();
+		assertFalse(failed.get());
+	}
 
-    MyObject() {
-      this("hello", "world", 42);
-    }
+	@SuppressWarnings("unused")
+	private static class MyObject {
+		String a;
+		String b;
+		int i;
 
-    public MyObject(String a, String b, int i) {
-      this.a = a;
-      this.b = b;
-      this.i = i;
-    }
-  }
+		MyObject() {
+			this("hello", "world", 42);
+		}
+
+		public MyObject(String a, String b, int i) {
+			this.a = a;
+			this.b = b;
+			this.i = i;
+		}
+	}
 }

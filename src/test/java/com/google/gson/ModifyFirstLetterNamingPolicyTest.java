@@ -25,63 +25,63 @@ import junit.framework.TestCase;
  */
 public class ModifyFirstLetterNamingPolicyTest extends TestCase {
 
-  public void testInvalidConstruction() throws Exception {
-    try {
-      new ModifyFirstLetterNamingPolicy(null);
-      fail("Null values are not allowed as a constructor parameters");
-    } catch (NullPointerException expected) { }
-  }
+	public void testInvalidConstruction() throws Exception {
+		try {
+			new ModifyFirstLetterNamingPolicy(null);
+			fail("Null values are not allowed as a constructor parameters");
+		} catch (NullPointerException expected) { }
+	}
 
-  public void testLowerCaseFirstLetter() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.LOWER);
-    assertEquals("blah", policy.translateName("Blah", String.class, null));
-    assertEquals("blah", policy.translateName("blah", String.class, null));
-  }
+	public void testLowerCaseFirstLetter() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.LOWER);
+		assertEquals("blah", policy.translateName("Blah", String.class, null));
+		assertEquals("blah", policy.translateName("blah", String.class, null));
+	}
 
-  public void testUpperCaseFirstLetter() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
-    assertEquals("Blah", policy.translateName("blah", String.class, null));
-    assertEquals("Blah", policy.translateName("Blah", String.class, null));
-  }
+	public void testUpperCaseFirstLetter() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
+		assertEquals("Blah", policy.translateName("blah", String.class, null));
+		assertEquals("Blah", policy.translateName("Blah", String.class, null));
+	}
 
-  public void testSingleCharacterField() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
-    assertEquals("B", policy.translateName("b", String.class, null));
-    assertEquals("B", policy.translateName("B", String.class, null));
-  }
+	public void testSingleCharacterField() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
+		assertEquals("B", policy.translateName("b", String.class, null));
+		assertEquals("B", policy.translateName("B", String.class, null));
+	}
 
-  public void testFieldStartsWithUnderscore() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
-    assertEquals("_Blah", policy.translateName("_blah", String.class, null));
-    assertEquals("_Blah", policy.translateName("_Blah", String.class, null));
-  }
+	public void testFieldStartsWithUnderscore() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
+		assertEquals("_Blah", policy.translateName("_blah", String.class, null));
+		assertEquals("_Blah", policy.translateName("_Blah", String.class, null));
+	}
 
-  public void testFieldStartsWithUnderscoreFollowedBySingleLetter() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
-    assertEquals("_B", policy.translateName("_b", String.class, null));
-    assertEquals("_B", policy.translateName("_B", String.class, null));
-  }
+	public void testFieldStartsWithUnderscoreFollowedBySingleLetter() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
+		assertEquals("_B", policy.translateName("_b", String.class, null));
+		assertEquals("_B", policy.translateName("_B", String.class, null));
+	}
 
-  public void testFieldHasSingleNonLetter() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.LOWER);
-    assertEquals("_", policy.translateName("_", String.class, null));
+	public void testFieldHasSingleNonLetter() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.LOWER);
+		assertEquals("_", policy.translateName("_", String.class, null));
 
-    policy = new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
-    assertEquals("_", policy.translateName("_", String.class, null));
-  }
+		policy = new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
+		assertEquals("_", policy.translateName("_", String.class, null));
+	}
 
-  public void testFieldHasNoLetters() throws Exception {
-    ModifyFirstLetterNamingPolicy policy =
-        new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.LOWER);
-    assertEquals("$_$", policy.translateName("$_$", String.class, null));
+	public void testFieldHasNoLetters() throws Exception {
+		ModifyFirstLetterNamingPolicy policy =
+		    new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.LOWER);
+		assertEquals("$_$", policy.translateName("$_$", String.class, null));
 
-    policy = new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
-    assertEquals("$_$", policy.translateName("$_$", String.class, null));
-  }
+		policy = new ModifyFirstLetterNamingPolicy(ModifyFirstLetterNamingPolicy.LetterModifier.UPPER);
+		assertEquals("$_$", policy.translateName("$_$", String.class, null));
+	}
 }

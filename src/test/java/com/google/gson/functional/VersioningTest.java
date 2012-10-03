@@ -30,143 +30,143 @@ import junit.framework.TestCase;
  * @author Joel Leitch
  */
 public class VersioningTest extends TestCase {
-  private static final int A = 0;
-  private static final int B = 1;
-  private static final int C = 2;
-  private static final int D = 3;
+	private static final int A = 0;
+	private static final int B = 1;
+	private static final int C = 2;
+	private static final int D = 3;
 
-  private GsonBuilder builder;
+	private GsonBuilder builder;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    builder = new GsonBuilder();
-  }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		builder = new GsonBuilder();
+	}
 
-  public void testVersionedUntilSerialization() {
-    Version1 target = new Version1();
-    Gson gson = builder.setVersion(1.29).create();
-    String json = gson.toJson(target);
-    assertTrue(json.contains("\"a\":" + A));
-    
-    gson = builder.setVersion(1.3).create();
-    json = gson.toJson(target);
-    assertFalse(json.contains("\"a\":" + A));
-  }
-  
-  public void testVersionedUntilDeserialization() {
-    Gson gson = builder.setVersion(1.3).create();
-    String json = "{\"a\":3,\"b\":4,\"c\":5}";
-    Version1 version1 = gson.fromJson(json, Version1.class);
-    assertEquals(A, version1.a);
-  }
+	public void testVersionedUntilSerialization() {
+		Version1 target = new Version1();
+		Gson gson = builder.setVersion(1.29).create();
+		String json = gson.toJson(target);
+		assertTrue(json.contains("\"a\":" + A));
 
-  public void testVersionedClassesSerialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    String json1 = gson.toJson(new Version1());
-    String json2 = gson.toJson(new Version1_1());
-    assertEquals(json1, json2);
-  }
+		gson = builder.setVersion(1.3).create();
+		json = gson.toJson(target);
+		assertFalse(json.contains("\"a\":" + A));
+	}
 
-  public void testVersionedClassesDeserialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    String json = "{\"a\":3,\"b\":4,\"c\":5}";
-    Version1 version1 = gson.fromJson(json, Version1.class);
-    assertEquals(3, version1.a);
-    assertEquals(4, version1.b);
-    Version1_1 version1_1 = gson.fromJson(json, Version1_1.class);
-    assertEquals(3, version1_1.a);
-    assertEquals(4, version1_1.b);
-    assertEquals(C, version1_1.c);
-  }
+	public void testVersionedUntilDeserialization() {
+		Gson gson = builder.setVersion(1.3).create();
+		String json = "{\"a\":3,\"b\":4,\"c\":5}";
+		Version1 version1 = gson.fromJson(json, Version1.class);
+		assertEquals(A, version1.a);
+	}
 
-  public void testIgnoreLaterVersionClassSerialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    assertEquals("", gson.toJson(new Version1_2()));
-  }
+	public void testVersionedClassesSerialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		String json1 = gson.toJson(new Version1());
+		String json2 = gson.toJson(new Version1_1());
+		assertEquals(json1, json2);
+	}
 
-  public void testIgnoreLaterVersionClassDeserialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    String json = "{\"a\":3,\"b\":4,\"c\":5,\"d\":6}";
-    Version1_2 version1_2 = gson.fromJson(json, Version1_2.class);
-    // Since the class is versioned to be after 1.0, all fields should get set to
-    // their default values.
-    assertEquals(A, version1_2.a);
-    assertEquals(B, version1_2.b);
-    assertEquals(C, version1_2.c);
-    assertEquals(D, version1_2.d);
-  }
+	public void testVersionedClassesDeserialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		String json = "{\"a\":3,\"b\":4,\"c\":5}";
+		Version1 version1 = gson.fromJson(json, Version1.class);
+		assertEquals(3, version1.a);
+		assertEquals(4, version1.b);
+		Version1_1 version1_1 = gson.fromJson(json, Version1_1.class);
+		assertEquals(3, version1_1.a);
+		assertEquals(4, version1_1.b);
+		assertEquals(C, version1_1.c);
+	}
 
-  public void testVersionedGsonWithUnversionedClassesSerialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    BagOfPrimitives target = new BagOfPrimitives(10, 20, false, "stringValue");
-    assertEquals(target.getExpectedJson(), gson.toJson(target));
-  }
+	public void testIgnoreLaterVersionClassSerialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		assertEquals("", gson.toJson(new Version1_2()));
+	}
 
-  public void testVersionedGsonWithUnversionedClassesDeserialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    String json = "{\"longValue\":10,\"intValue\":20,\"booleanValue\":false}";
+	public void testIgnoreLaterVersionClassDeserialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		String json = "{\"a\":3,\"b\":4,\"c\":5,\"d\":6}";
+		Version1_2 version1_2 = gson.fromJson(json, Version1_2.class);
+		// Since the class is versioned to be after 1.0, all fields should get set to
+		// their default values.
+		assertEquals(A, version1_2.a);
+		assertEquals(B, version1_2.b);
+		assertEquals(C, version1_2.c);
+		assertEquals(D, version1_2.d);
+	}
 
-    BagOfPrimitives expected = new BagOfPrimitives();
-    expected.longValue = 10;
-    expected.intValue = 20;
-    expected.booleanValue = false;
-    BagOfPrimitives actual = gson.fromJson(json, BagOfPrimitives.class);
-    assertEquals(expected, actual);
-  }
+	public void testVersionedGsonWithUnversionedClassesSerialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		BagOfPrimitives target = new BagOfPrimitives(10, 20, false, "stringValue");
+		assertEquals(target.getExpectedJson(), gson.toJson(target));
+	}
 
-  public void testVersionedGsonMixingSinceAndUntilSerialization() {
-    Gson gson = builder.setVersion(1.0).create();
-    SinceUntilMixing target = new SinceUntilMixing();
-    String json = gson.toJson(target);
-    assertFalse(json.contains("\"b\":" + B));
-    
-    gson = builder.setVersion(1.2).create();
-    json = gson.toJson(target);
-    assertTrue(json.contains("\"b\":" + B));
-    
-    gson = builder.setVersion(1.3).create();
-    json = gson.toJson(target);
-    assertFalse(json.contains("\"b\":" + B));
-  }
+	public void testVersionedGsonWithUnversionedClassesDeserialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		String json = "{\"longValue\":10,\"intValue\":20,\"booleanValue\":false}";
 
-  public void testVersionedGsonMixingSinceAndUntilDeserialization() {
-    String json = "{\"a\":5,\"b\":6}";
-    Gson gson = builder.setVersion(1.0).create();
-    SinceUntilMixing result = gson.fromJson(json, SinceUntilMixing.class);
-    assertEquals(5, result.a);
-    assertEquals(B, result.b);
-    
-    gson = builder.setVersion(1.2).create();
-    result = gson.fromJson(json, SinceUntilMixing.class);
-    assertEquals(5, result.a);
-    assertEquals(6, result.b);
-    
-    gson = builder.setVersion(1.3).create();
-    result = gson.fromJson(json, SinceUntilMixing.class);
-    assertEquals(5, result.a);
-    assertEquals(B, result.b);
-  }
+		BagOfPrimitives expected = new BagOfPrimitives();
+		expected.longValue = 10;
+		expected.intValue = 20;
+		expected.booleanValue = false;
+		BagOfPrimitives actual = gson.fromJson(json, BagOfPrimitives.class);
+		assertEquals(expected, actual);
+	}
 
-  private static class Version1 {
-    @Until(1.3) int a = A;
-    @Since(1.0) int b = B;
-  }
+	public void testVersionedGsonMixingSinceAndUntilSerialization() {
+		Gson gson = builder.setVersion(1.0).create();
+		SinceUntilMixing target = new SinceUntilMixing();
+		String json = gson.toJson(target);
+		assertFalse(json.contains("\"b\":" + B));
 
-  private static class Version1_1 extends Version1 {
-    @Since(1.1) int c = C;
-  }
+		gson = builder.setVersion(1.2).create();
+		json = gson.toJson(target);
+		assertTrue(json.contains("\"b\":" + B));
 
-  @Since(1.2)
-  private static class Version1_2 extends Version1_1 {
-    int d = D;
-  }
-  
-  private static class SinceUntilMixing {
-    int a = A;
-    
-    @Since(1.1)
-    @Until(1.3)
-    int b = B;
-  }
+		gson = builder.setVersion(1.3).create();
+		json = gson.toJson(target);
+		assertFalse(json.contains("\"b\":" + B));
+	}
+
+	public void testVersionedGsonMixingSinceAndUntilDeserialization() {
+		String json = "{\"a\":5,\"b\":6}";
+		Gson gson = builder.setVersion(1.0).create();
+		SinceUntilMixing result = gson.fromJson(json, SinceUntilMixing.class);
+		assertEquals(5, result.a);
+		assertEquals(B, result.b);
+
+		gson = builder.setVersion(1.2).create();
+		result = gson.fromJson(json, SinceUntilMixing.class);
+		assertEquals(5, result.a);
+		assertEquals(6, result.b);
+
+		gson = builder.setVersion(1.3).create();
+		result = gson.fromJson(json, SinceUntilMixing.class);
+		assertEquals(5, result.a);
+		assertEquals(B, result.b);
+	}
+
+	private static class Version1 {
+		@Until(1.3) int a = A;
+		@Since(1.0) int b = B;
+	}
+
+	private static class Version1_1 extends Version1 {
+		@Since(1.1) int c = C;
+	}
+
+	@Since(1.2)
+	private static class Version1_2 extends Version1_1 {
+		int d = D;
+	}
+
+	private static class SinceUntilMixing {
+		int a = A;
+
+		@Since(1.1)
+		@Until(1.3)
+		int b = B;
+	}
 }

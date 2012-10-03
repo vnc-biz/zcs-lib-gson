@@ -26,74 +26,74 @@ package com.google.gson;
  * @author Joel Leitch
  */
 public enum FieldNamingPolicy {
-  /**
-   * Using this naming policy with Gson will ensure that the first "letter" of the Java
-   * field name is capitalized when serialized to its JSON form.
-   *
-   * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
-   * <ul>
-   *   <li>someFieldName ---> SomeFieldName</li>
-   *   <li>_someFieldName ---> _SomeFieldName</li>
-   * </ul>
-   */
-  UPPER_CAMEL_CASE(new ModifyFirstLetterNamingPolicy(
-      ModifyFirstLetterNamingPolicy.LetterModifier.UPPER)),
+	/**
+	 * Using this naming policy with Gson will ensure that the first "letter" of the Java
+	 * field name is capitalized when serialized to its JSON form.
+	 *
+	 * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
+	 * <ul>
+	 *   <li>someFieldName ---> SomeFieldName</li>
+	 *   <li>_someFieldName ---> _SomeFieldName</li>
+	 * </ul>
+	 */
+	UPPER_CAMEL_CASE(new ModifyFirstLetterNamingPolicy(
+	    ModifyFirstLetterNamingPolicy.LetterModifier.UPPER)),
 
-  /**
-   * Using this naming policy with Gson will ensure that the first "letter" of the Java
-   * field name is capitalized when serialized to its JSON form and the words will be
-   * separated by a space.
-   *
-   * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
-   * <ul>
-   *   <li>someFieldName ---> Some Field Name</li>
-   *   <li>_someFieldName ---> _Some Field Name</li>
-   * </ul>
-   * 
-   * @since 1.4
-   */
-  UPPER_CAMEL_CASE_WITH_SPACES(new UpperCamelCaseSeparatorNamingPolicy(" ")),
-          
-  /**
-   * Using this naming policy with Gson will modify the Java Field name from its camel cased
-   * form to a lower case field name where each word is separated by an underscore (_).
-   *
-   * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
-   * <ul>
-   *   <li>someFieldName ---> some_field_name</li>
-   *   <li>_someFieldName ---> _some_field_name</li>
-   *   <li>aStringField ---> a_string_field</li>
-   *   <li>aURL ---> a_u_r_l</li>
-   * </ul>
-   */
-  LOWER_CASE_WITH_UNDERSCORES(new LowerCamelCaseSeparatorNamingPolicy("_")),
-  
-  /**
-   * Using this naming policy with Gson will modify the Java Field name from its camel cased
-   * form to a lower case field name where each word is separated by a dash (-).
-   *
-   * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
-   * <ul>
-   *   <li>someFieldName ---> some-field-name</li>
-   *   <li>_someFieldName ---> _some-field-name</li>
-   *   <li>aStringField ---> a-string-field</li>
-   *   <li>aURL ---> a-u-r-l</li>
-   * </ul>
-   * Using dashes in JavaScript is not recommended since dash is also used for a minus sign in
-   * expressions. This requires that a field named with dashes is always accessed as a quoted
-   * property like {@code myobject['my-field']}. Accessing it as an object field
-   * {@code myobject.my-field} will result in an unintended javascript expression.
-   * @since 1.4
-   */
-  LOWER_CASE_WITH_DASHES(new LowerCamelCaseSeparatorNamingPolicy("-"));
+	/**
+	 * Using this naming policy with Gson will ensure that the first "letter" of the Java
+	 * field name is capitalized when serialized to its JSON form and the words will be
+	 * separated by a space.
+	 *
+	 * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
+	 * <ul>
+	 *   <li>someFieldName ---> Some Field Name</li>
+	 *   <li>_someFieldName ---> _Some Field Name</li>
+	 * </ul>
+	 *
+	 * @since 1.4
+	 */
+	UPPER_CAMEL_CASE_WITH_SPACES(new UpperCamelCaseSeparatorNamingPolicy(" ")),
 
-  private final FieldNamingStrategy2 namingPolicy;
+	/**
+	 * Using this naming policy with Gson will modify the Java Field name from its camel cased
+	 * form to a lower case field name where each word is separated by an underscore (_).
+	 *
+	 * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
+	 * <ul>
+	 *   <li>someFieldName ---> some_field_name</li>
+	 *   <li>_someFieldName ---> _some_field_name</li>
+	 *   <li>aStringField ---> a_string_field</li>
+	 *   <li>aURL ---> a_u_r_l</li>
+	 * </ul>
+	 */
+	LOWER_CASE_WITH_UNDERSCORES(new LowerCamelCaseSeparatorNamingPolicy("_")),
 
-  private FieldNamingPolicy(FieldNamingStrategy2 namingPolicy) {
-    this.namingPolicy = namingPolicy;
-  }
+	/**
+	 * Using this naming policy with Gson will modify the Java Field name from its camel cased
+	 * form to a lower case field name where each word is separated by a dash (-).
+	 *
+	 * <p>Here's a few examples of the form "Java Field Name" ---> "JSON Field Name":</p>
+	 * <ul>
+	 *   <li>someFieldName ---> some-field-name</li>
+	 *   <li>_someFieldName ---> _some-field-name</li>
+	 *   <li>aStringField ---> a-string-field</li>
+	 *   <li>aURL ---> a-u-r-l</li>
+	 * </ul>
+	 * Using dashes in JavaScript is not recommended since dash is also used for a minus sign in
+	 * expressions. This requires that a field named with dashes is always accessed as a quoted
+	 * property like {@code myobject['my-field']}. Accessing it as an object field
+	 * {@code myobject.my-field} will result in an unintended javascript expression.
+	 * @since 1.4
+	 */
+	LOWER_CASE_WITH_DASHES(new LowerCamelCaseSeparatorNamingPolicy("-"));
 
-  FieldNamingStrategy2 getFieldNamingPolicy() {
-    return namingPolicy;
-  }
+	private final FieldNamingStrategy2 namingPolicy;
+
+	private FieldNamingPolicy(FieldNamingStrategy2 namingPolicy) {
+		this.namingPolicy = namingPolicy;
+	}
+
+	FieldNamingStrategy2 getFieldNamingPolicy() {
+		return namingPolicy;
+	}
 }
